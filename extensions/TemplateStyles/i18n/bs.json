@@ -1,9 +1,0 @@
-{
-	"@metadata": {
-		"authors": [
-			"Srdjan m"
-		]
-	},
-	"templatestyles-bad-src": "Stranica [[:$1|$2]] mora imati model sadržaja \"{{int:content-model-sanitized-css}}\" za TemplateStyles (trenutni model je \"$3\").",
-	"content-model-sanitized-css": "Pročišćeni CSS"
-}

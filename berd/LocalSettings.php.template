@@ -135,11 +135,11 @@ ${DOLLAR}wgDefaultSkin = 'timeless';
 # BERD-logo
 ${DOLLAR}wgLogo = "${DOLLAR}wgResourceBasePath/logo_berdc_bw.jpg";
 
-wfLoadExtension( 'TemplateStyles' );
-${DOLLAR}wgTidyConfig = [
-    'driver' => 'RaggettInternalPHP',
-    'tidyConfigFile' => "${DOLLAR}IP/includes/tidy/tidy.conf",
-];
+#wfLoadExtension( 'TemplateStyles' );
+#${DOLLAR}wgTidyConfig = [
+#    'driver' => 'RaggettInternalPHP',
+#    'tidyConfigFile' => "${DOLLAR}IP/includes/tidy/tidy.conf",
+#];
 
 wfLoadExtension( 'TemplateData' );
 

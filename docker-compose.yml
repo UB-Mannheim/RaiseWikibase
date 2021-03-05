@@ -24,7 +24,7 @@ services:
       - ./berd/LocalSettings.php.template:/LocalSettings.php.template
       - ./berd/logo_berdc_bw.jpg:/var/www/html/logo_berdc_bw.jpg
       - ./berd/TimelessTemplate.php:/var/www/html/skins/Timeless/includes/TimelessTemplate.php
-      - ./extensions/TemplateStyles:/var/www/html/extensions/TemplateStyles
+      #- ./extensions/TemplateStyles:/var/www/html/extensions/TemplateStyles
       #- ./extensions/createOAuthConsumer.php:/var/www/html/extensions/OAuth/maintenance/createOAuthConsumer.php
     depends_on:
     - mysql
