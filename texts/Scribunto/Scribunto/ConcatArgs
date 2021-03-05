@@ -1,0 +1,40 @@
+
+local p = {}
+
+function table.slice(tbl, first, last, step)
+  local sliced = {}
+  
+  for i = first or 1, last or #tbl, step or 1 do
+    sliced[#sliced+1] = tbl[i]
+  end
+
+  return sliced
+end
+
+p.slice = table.slice
+
+local function count_args(table)
+	local nargs = 0
+	for num, _ in ipairs(table) do
+		nargs = math.max(num, nargs)
+	end
+	return nargs
+end
+
+
+
+function p.ConcatArgs(frame)
+	local pargs = frame:getParent().args
+	local init = tonumber(frame.args["init"]) or frame.args["init"]
+	
+	local slice = table.slice(
+		pargs,
+		tostring(frame.args["min"]),
+		count_args(pargs)
+	)
+	table.insert(slice, 1, pargs[init])
+	return table.concat(slice, "|")
+end
+
+return p
+

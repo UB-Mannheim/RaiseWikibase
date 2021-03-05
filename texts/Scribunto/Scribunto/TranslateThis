@@ -1,0 +1,55 @@
+local fb = require('Module:Fallback')
+
+return { main = function( frame )
+	
+	function shallowcopy(orig)
+		if type(orig) ~= 'table' then
+			return orig
+		end
+		
+		local result = {}
+		for key, value in pairs(orig) do
+			result[key] = value
+		end
+		return result
+	end
+	
+	local args = shallowcopy(frame:getParent().args)
+	local lang = args.lang or frame:preprocess("{{int:lang}}") -- I don't know of any other way to get the user's language...
+	args.lang = nil
+	
+	local anchor = args.anchor
+	args.anchor = nil
+	if (anchor and args[anchor]) then
+		anchor = args[anchor]
+	end
+	anchor = anchor and frame:expandTemplate( { title = "Anchor", args = { anchor } } ) or ''
+	
+	local result = args[ lang ]
+	if result and result ~= '' then
+		result = '<span lang="' .. lang .. '">' .. result .. '</span>'
+	else
+		local default = {}
+		for i, v in pairs( args ) do
+			if v ~= "" then
+				table.insert(default, '<span lang="' .. i .. '">' .. v .. '</span> <small>(' .. i .. ')</small>')
+			end
+		end
+		default = table.concat(default, ' / ')
+		args.default=default
+		local newlang
+		result, newlang = fb._langSwitch(args, lang)
+		if not newlang then
+			result = ''
+		elseif newlang~='default' then
+			result = '<span lang="' .. newlang .. '">' .. result .. '</span> <small>(' .. newlang .. ')</small>'
+		end
+		local langname = mw.language.fetchLanguageName( lang, lang )
+		if langname ~= "" and newlang then
+			result = result .. " – " .. frame:expandTemplate( { title = "Help translate", args = { langname, lang = lang } } )
+		end
+	end
+	
+	return anchor .. result
+end}
+

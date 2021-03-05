@@ -1,0 +1,44 @@
+local format = require('Module:TNT').format
+local i18n = {}
+
+i18n['cfg-error-msg-type'] = format('I18n/Documentation', 'cfg-error-msg-type')
+i18n['cfg-error-msg-empty'] = format('I18n/Documentation', 'cfg-error-msg-empty')
+
+-- cfg['template-namespace-heading']
+-- The heading shown in the template namespace.
+i18n['template-namespace-heading'] = format('I18n/Documentation', 'template-namespace-heading')
+
+-- cfg['module-namespace-heading']
+-- The heading shown in the module namespace.
+i18n['module-namespace-heading'] = format('I18n/Documentation', 'module-namespace-heading')
+
+-- cfg['file-namespace-heading']
+-- The heading shown in the file namespace.
+i18n['file-namespace-heading'] = format('I18n/Documentation', 'file-namespace-heading')
+
+-- cfg['other-namespaces-heading']
+-- The heading shown in other namespaces.
+i18n['other-namespaces-heading'] = format('I18n/Documentation', 'other-namespaces-heading')
+
+-- cfg['view-link-display']
+-- The text to display for "view" links.
+i18n['view-link-display'] = format('I18n/Documentation', 'view-link-display')
+
+-- cfg['edit-link-display']
+-- The text to display for "edit" links.
+i18n['edit-link-display'] = format('I18n/Documentation', 'edit-link-display')
+
+-- cfg['history-link-display']
+-- The text to display for "history" links.
+i18n['history-link-display'] = format('I18n/Documentation', 'history-link-display')
+
+-- cfg['purge-link-display']
+-- The text to display for "purge" links.
+i18n['purge-link-display'] = format('I18n/Documentation', 'purge-link-display')
+
+-- cfg['create-link-display']
+-- The text to display for "create" links.
+i18n['create-link-display'] = format('I18n/Documentation', 'create-link-display')
+
+return i18n
+

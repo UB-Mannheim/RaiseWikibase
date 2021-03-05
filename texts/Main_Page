@@ -1,0 +1,23 @@
+== BERD knowledge graph ==
+
+This is an automatically constructed BERD knowledge graph using [https://github.com/UB-Mannheim/RaiseWikibase RaiseWikibase], [https://github.com/wmde/wikibase-docker Wikibase Docker] and [https://www.wikidata.org Wikidata].
+
+* [//localhost:8181/wiki/Special:AllPages?from=&to=&namespace=120&hideredirects=1 Items]
+* [//localhost:8181/wiki/Special:AllPages?from=&to=&namespace=122&hideredirects=1 Properties]
+* [//localhost:8181/wiki/Special:AllPages?from=&to=&namespace=10&hideredirects=1 Templates]
+* [//localhost:8181/wiki/Special:AllPages?from=&to=&namespace=828&hideredirects=1 Modules]
+* [//localhost:8181/wiki/Special:AllPages?from=&to=&namespace=0&hideredirects=1 Pages in the main namespace]
+
+== Wikibase and Wikidata ==
+
+[https://wikiba.se/ Wikibase] is an open source software for creating a [https://en.wikipedia.org/wiki/Knowledge_graph knowledge graph] from scratch. 
+
+[https://www.wikidata.org Wikidata] is the main [https://wikiba.se/ Wikibase] instance containing general-purpose '''structured data''' that can be read and edited by both humans and machines. 
+
+== Getting started ==
+* [https://www.mediawiki.org/wiki/Special:MyLanguage/Manual:Configuration_settings Configuration settings list]
+* [https://www.mediawiki.org/wiki/Special:MyLanguage/Manual:FAQ MediaWiki FAQ]
+* [https://lists.wikimedia.org/mailman/listinfo/mediawiki-announce MediaWiki release mailing list]
+* [https://www.mediawiki.org/wiki/Special:MyLanguage/Localisation#Translation_resources Localise MediaWiki for your language]
+* [https://www.mediawiki.org/wiki/Special:MyLanguage/Manual:Combating_spam Learn how to combat spam on your wiki]
+

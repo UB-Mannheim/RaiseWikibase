@@ -1,0 +1,437 @@
+----------------------------------------------------------------------------------------------------
+--
+--                               Configuration for Module:Documentation
+--
+-- Here you can set the values of the parameters and messages used in Module:Documentation to
+-- localise it to your wiki and your language. Unless specified otherwise, values given here
+-- should be string values.
+----------------------------------------------------------------------------------------------------
+
+local cfg = {} -- Do not edit this line.
+
+----------------------------------------------------------------------------------------------------
+-- Protection template configuration
+----------------------------------------------------------------------------------------------------
+
+-- cfg['protection-reason-edit']
+-- The protection reason for edit-protected templates to pass to
+-- [[Module:Protection banner]].
+cfg['protection-reason-edit'] = 'template'
+
+--[[
+----------------------------------------------------------------------------------------------------
+-- Sandbox notice configuration
+--
+-- On sandbox pages the module can display a template notifying users that the current page is a
+-- sandbox, and the location of test cases pages, etc. The module decides whether the page is a
+-- sandbox or not based on the value of cfg['sandbox-subpage']. The following settings configure the
+-- messages that the notices contains.
+----------------------------------------------------------------------------------------------------
+--]]
+
+-- cfg['sandbox-notice-image']
+-- The image displayed in the sandbox notice.
+cfg['sandbox-notice-image'] = '[[File:Sandbox.svg|50px|alt=|link=]]'
+
+--[[
+-- cfg['sandbox-notice-pagetype-template']
+-- cfg['sandbox-notice-pagetype-module']
+-- cfg['sandbox-notice-pagetype-other']
+-- The page type of the sandbox page. The message that is displayed depends on the current subject
+-- namespace. This message is used in either cfg['sandbox-notice-blurb'] or
+-- cfg['sandbox-notice-diff-blurb'].
+--]]
+cfg['sandbox-notice-pagetype-template'] = '[[Wikipedia:Template test cases|template sandbox]] page'
+cfg['sandbox-notice-pagetype-module'] = '[[Wikipedia:Template test cases|module sandbox]] page'
+cfg['sandbox-notice-pagetype-other'] = 'sandbox page'
+
+--[[
+-- cfg['sandbox-notice-blurb']
+-- cfg['sandbox-notice-diff-blurb']
+-- cfg['sandbox-notice-diff-display']
+-- Either cfg['sandbox-notice-blurb'] or cfg['sandbox-notice-diff-blurb'] is the opening sentence
+-- of the sandbox notice. The latter has a diff link, but the former does not. $1 is the page
+-- type, which is either cfg['sandbox-notice-pagetype-template'],
+-- cfg['sandbox-notice-pagetype-module'] or cfg['sandbox-notice-pagetype-other'] depending what
+-- namespace we are in. $2 is a link to the main template page, and $3 is a diff link between
+-- the sandbox and the main template. The display value of the diff link is set by 
+-- cfg['sandbox-notice-compare-link-display'].
+--]]
+cfg['sandbox-notice-blurb'] = 'This is the $1 for $2.'
+cfg['sandbox-notice-diff-blurb'] = 'This is the $1 for $2 ($3).'
+cfg['sandbox-notice-compare-link-display'] = 'diff'
+
+--[[
+-- cfg['sandbox-notice-testcases-blurb']
+-- cfg['sandbox-notice-testcases-link-display']
+-- cfg['sandbox-notice-testcases-run-blurb']
+-- cfg['sandbox-notice-testcases-run-link-display']
+-- cfg['sandbox-notice-testcases-blurb'] is a sentence notifying the user that there is a test cases page
+-- corresponding to this sandbox that they can edit. $1 is a link to the test cases page.
+-- cfg['sandbox-notice-testcases-link-display'] is the display value for that link.
+-- cfg['sandbox-notice-testcases-run-blurb'] is a sentence notifying the user that there is a test cases page
+-- corresponding to this sandbox that they can edit, along with a link to run it. $1 is a link to the test
+-- cases page, and $2 is a link to the page to run it.
+-- cfg['sandbox-notice-testcases-run-link-display'] is the display value for the link to run the test
+-- cases.
+--]]
+cfg['sandbox-notice-testcases-blurb'] = 'See also the companion subpage for $1.'
+cfg['sandbox-notice-testcases-link-display'] = 'test cases'
+cfg['sandbox-notice-testcases-run-blurb'] = 'See also the companion subpage for $1 ($2).'
+cfg['sandbox-notice-testcases-run-link-display'] = 'run'
+
+-- cfg['sandbox-category']
+-- A category to add to all template sandboxes.
+cfg['sandbox-category'] = 'Template sandboxes'
+
+----------------------------------------------------------------------------------------------------
+-- Start box configuration
+----------------------------------------------------------------------------------------------------
+
+-- cfg['documentation-icon-wikitext']
+-- The wikitext for the icon shown at the top of the template.
+cfg['documentation-icon-wikitext'] = '[[File:Test Template Info-Icon - Version (2).svg|50px|link=|alt=]]'
+
+-- cfg['template-namespace-heading']
+-- The heading shown in the template namespace.
+cfg['template-namespace-heading'] = 'Template documentation'
+
+-- cfg['module-namespace-heading']
+-- The heading shown in the module namespace.
+cfg['module-namespace-heading'] = 'Module documentation'
+
+-- cfg['file-namespace-heading']
+-- The heading shown in the file namespace.
+cfg['file-namespace-heading'] = 'Summary'
+
+-- cfg['other-namespaces-heading']
+-- The heading shown in other namespaces.
+cfg['other-namespaces-heading'] = 'Documentation'
+
+-- cfg['view-link-display']
+-- The text to display for "view" links.
+cfg['view-link-display'] = 'view'
+
+-- cfg['edit-link-display']
+-- The text to display for "edit" links.
+cfg['edit-link-display'] = 'edit'
+
+-- cfg['history-link-display']
+-- The text to display for "history" links.
+cfg['history-link-display'] = 'history'
+
+-- cfg['purge-link-display']
+-- The text to display for "purge" links.
+cfg['purge-link-display'] = 'purge'
+
+-- cfg['create-link-display']
+-- The text to display for "create" links.
+cfg['create-link-display'] = 'create'
+
+----------------------------------------------------------------------------------------------------
+-- Link box (end box) configuration
+----------------------------------------------------------------------------------------------------
+
+-- cfg['transcluded-from-blurb']
+-- Notice displayed when the docs are transcluded from another page. $1 is a wikilink to that page.
+cfg['transcluded-from-blurb'] = 'The above [[Wikipedia:Template documentation|documentation]] is [[Wikipedia:Transclusion|transcluded]] from $1.'
+
+--[[
+-- cfg['create-module-doc-blurb']
+-- Notice displayed in the module namespace when the documentation subpage does not exist.
+-- $1 is a link to create the documentation page with the preload cfg['module-preload'] and the
+-- display cfg['create-link-display'].
+--]]
+cfg['create-module-doc-blurb'] = 'You might want to $1 a documentation page for this [[Wikipedia:Lua|Scribunto module]].'
+
+----------------------------------------------------------------------------------------------------
+-- Experiment blurb configuration
+----------------------------------------------------------------------------------------------------
+
+--[[
+-- cfg['experiment-blurb-template']
+-- cfg['experiment-blurb-module']
+-- The experiment blurb is the text inviting editors to experiment in sandbox and test cases pages.
+-- It is only shown in the template and module namespaces. With the default English settings, it
+-- might look like this:
+--
+-- Editors can experiment in this template's sandbox (edit | diff) and testcases (edit) pages.
+--
+-- In this example, "sandbox", "edit", "diff", "testcases", and "edit" would all be links.
+--
+-- There are two versions, cfg['experiment-blurb-template'] and cfg['experiment-blurb-module'], depending
+-- on what namespace we are in.
+-- 
+-- Parameters:
+--
+-- $1 is a link to the sandbox page. If the sandbox exists, it is in the following format:
+--
+--     cfg['sandbox-link-display'] (cfg['sandbox-edit-link-display'] | cfg['compare-link-display'])
+-- 
+-- If the sandbox doesn't exist, it is in the format:
+--
+--     cfg['sandbox-link-display'] (cfg['sandbox-create-link-display'] | cfg['mirror-link-display'])
+-- 
+-- The link for cfg['sandbox-create-link-display'] link preloads the page with cfg['template-sandbox-preload']
+-- or cfg['module-sandbox-preload'], depending on the current namespace. The link for cfg['mirror-link-display']
+-- loads a default edit summary of cfg['mirror-edit-summary'].
+--
+-- $2 is a link to the test cases page. If the test cases page exists, it is in the following format:
+--
+--     cfg['testcases-link-display'] (cfg['testcases-edit-link-display'] | cfg['testcases-run-link-display'])
+--
+-- If the test cases page doesn't exist, it is in the format:
+-- 
+--     cfg['testcases-link-display'] (cfg['testcases-create-link-display'])
+--
+-- If the test cases page doesn't exist, the link for cfg['testcases-create-link-display'] preloads the
+-- page with cfg['template-testcases-preload'] or cfg['module-testcases-preload'], depending on the current
+-- namespace.
+--]]
+cfg['experiment-blurb-template'] = "Editors can experiment in this template's $1 and $2 pages."
+cfg['experiment-blurb-module'] = "Editors can experiment in this module's $1 and $2 pages."
+
+----------------------------------------------------------------------------------------------------
+-- Sandbox link configuration
+----------------------------------------------------------------------------------------------------
+
+-- cfg['sandbox-subpage']
+-- The name of the template subpage typically used for sandboxes.
+cfg['sandbox-subpage'] = 'sandbox'
+
+-- cfg['template-sandbox-preload']
+-- Preload file for template sandbox pages.
+cfg['template-sandbox-preload'] = 'Template:Documentation/preload-sandbox'
+
+-- cfg['module-sandbox-preload']
+-- Preload file for Lua module sandbox pages.
+cfg['module-sandbox-preload'] = 'Template:Documentation/preload-module-sandbox'
+
+-- cfg['sandbox-link-display']
+-- The text to display for "sandbox" links.
+cfg['sandbox-link-display'] = 'sandbox'
+
+-- cfg['sandbox-edit-link-display']
+-- The text to display for sandbox "edit" links.
+cfg['sandbox-edit-link-display'] = 'edit'
+
+-- cfg['sandbox-create-link-display']
+-- The text to display for sandbox "create" links.
+cfg['sandbox-create-link-display'] = 'create'
+
+-- cfg['compare-link-display']
+-- The text to display for "compare" links.
+cfg['compare-link-display'] = 'diff'
+
+-- cfg['mirror-edit-summary']
+-- The default edit summary to use when a user clicks the "mirror" link. $1 is a wikilink to the
+-- template page.
+cfg['mirror-edit-summary'] = 'Create sandbox version of $1'
+
+-- cfg['mirror-link-display']
+-- The text to display for "mirror" links.
+cfg['mirror-link-display'] = 'mirror'
+
+-- cfg['mirror-link-preload']
+-- The page to preload when a user clicks the "mirror" link.
+cfg['mirror-link-preload'] = 'Template:Documentation/mirror'
+
+----------------------------------------------------------------------------------------------------
+-- Test cases link configuration
+----------------------------------------------------------------------------------------------------
+
+-- cfg['testcases-subpage']
+-- The name of the template subpage typically used for test cases.
+cfg['testcases-subpage'] = 'testcases'
+
+-- cfg['template-testcases-preload']
+-- Preload file for template test cases pages.
+cfg['template-testcases-preload'] = 'Template:Documentation/preload-testcases'
+
+-- cfg['module-testcases-preload']
+-- Preload file for Lua module test cases pages.
+cfg['module-testcases-preload'] = 'Template:Documentation/preload-module-testcases'
+
+-- cfg['testcases-link-display']
+-- The text to display for "testcases" links.
+cfg['testcases-link-display'] = 'testcases'
+
+-- cfg['testcases-edit-link-display']
+-- The text to display for test cases "edit" links.
+cfg['testcases-edit-link-display'] = 'edit'
+
+-- cfg['testcases-run-link-display']
+-- The text to display for test cases "run" links.
+cfg['testcases-run-link-display'] = 'run'
+
+-- cfg['testcases-create-link-display']
+-- The text to display for test cases "create" links.
+cfg['testcases-create-link-display'] = 'create'
+
+----------------------------------------------------------------------------------------------------
+-- Add categories blurb configuration
+----------------------------------------------------------------------------------------------------
+
+--[[
+-- cfg['add-categories-blurb']
+-- Text to direct users to add categories to the /doc subpage. Not used if the "content" or
+-- "docname fed" arguments are set, as then it is not clear where to add the categories. $1 is a
+-- link to the /doc subpage with a display value of cfg['doc-link-display'].
+--]]
+cfg['add-categories-blurb'] = 'Please add categories to the $1 subpage.'
+
+-- cfg['doc-link-display']
+-- The text to display when linking to the /doc subpage.
+cfg['doc-link-display'] = '/doc'
+
+----------------------------------------------------------------------------------------------------
+-- Subpages link configuration
+----------------------------------------------------------------------------------------------------
+
+--[[
+-- cfg['subpages-blurb']
+-- The "Subpages of this template" blurb. $1 is a link to the main template's subpages with a
+-- display value of cfg['subpages-link-display']. In the English version this blurb is simply
+-- the link followed by a period, and the link display provides the actual text.
+--]]
+cfg['subpages-blurb'] = '$1.'
+
+--[[
+-- cfg['subpages-link-display']
+-- The text to display for the "subpages of this page" link. $1 is cfg['template-pagetype'],
+-- cfg['module-pagetype'] or cfg['default-pagetype'], depending on whether the current page is in
+-- the template namespace, the module namespace, or another namespace.
+--]]
+cfg['subpages-link-display'] = 'Subpages of this $1'
+
+-- cfg['template-pagetype']
+-- The pagetype to display for template pages.
+cfg['template-pagetype'] = 'template'
+
+-- cfg['module-pagetype']
+-- The pagetype to display for Lua module pages.
+cfg['module-pagetype'] = 'module'
+
+-- cfg['default-pagetype']
+-- The pagetype to display for pages other than templates or Lua modules.
+cfg['default-pagetype'] = 'page'
+
+----------------------------------------------------------------------------------------------------
+-- Doc link configuration
+----------------------------------------------------------------------------------------------------
+
+-- cfg['doc-subpage']
+-- The name of the subpage typically used for documentation pages.
+cfg['doc-subpage'] = 'doc'
+
+-- cfg['file-docpage-preload']
+-- Preload file for documentation page in the file namespace.
+cfg['file-docpage-preload'] = 'Template:Documentation/preload-filespace'
+
+-- cfg['docpage-preload']
+-- Preload file for template documentation pages in all namespaces.
+cfg['docpage-preload'] = 'Template:Documentation/preload'
+
+-- cfg['module-preload']
+-- Preload file for Lua module documentation pages.
+cfg['module-preload'] = 'Template:Documentation/preload-module-doc'
+
+----------------------------------------------------------------------------------------------------
+-- Print version configuration
+----------------------------------------------------------------------------------------------------
+
+-- cfg['print-subpage']
+-- The name of the template subpage used for print versions.
+cfg['print-subpage'] = 'Print'
+
+-- cfg['print-link-display']
+-- The text to display when linking to the /Print subpage.
+cfg['print-link-display'] = '/Print'
+
+-- cfg['print-blurb']
+-- Text to display if a /Print subpage exists. $1 is a link to the subpage with
+-- a display value of cfg['print-link-display'].
+cfg['print-blurb'] = 'A [[Help:Books/for experts#Improving the book layout|print version]] of this template exists at $1.'
+	.. ' If you make a change to this template, please update the print version as well.'
+
+-- cfg['display-print-category']
+-- Set to true to enable output of cfg['print-category'] if a /Print subpage exists.
+-- This should be a boolean value (either true or false).
+cfg['display-print-category'] = true
+
+-- cfg['print-category']
+-- Category to output if cfg['display-print-category'] is set to true, and a /Print subpage exists.
+cfg['print-category'] = 'Templates with print versions'
+
+----------------------------------------------------------------------------------------------------
+-- HTML and CSS configuration
+----------------------------------------------------------------------------------------------------
+
+-- cfg['templatestyles']
+-- The name of the TemplateStyles page where CSS is kept.
+-- Sandbox CSS will be at Module:Documentation/sandbox/styles.css when needed.
+cfg['templatestyles'] = 'Module:Documentation/styles.css'
+
+-- cfg['container']
+-- Class which can be used to set flex or grid CSS on the
+-- two child divs documentation and documentation-metadata
+cfg['container'] = 'documentation-container'
+
+-- cfg['main-div-classes']
+-- Classes added to the main HTML "div" tag.
+cfg['main-div-classes'] = 'documentation'
+
+-- cfg['main-div-heading-class']
+-- Class for the main heading for templates and modules and assoc. talk spaces
+cfg['main-div-heading-class'] = 'documentation-heading'
+
+-- cfg['start-box-class']
+-- Class for the start box
+cfg['start-box-class'] = 'documentation-startbox'
+
+-- cfg['start-box-link-classes']
+-- Classes used for the [view][edit][history] or [create] links in the start box.
+-- mw-editsection-like is per [[Wikipedia:Village pump (technical)/Archive 117]]
+cfg['start-box-link-classes'] = 'mw-editsection-like plainlinks'
+
+-- cfg['end-box-class']
+-- Class for the end box.
+cfg['end-box-class'] = 'documentation-metadata'
+
+-- cfg['end-box-plainlinks']
+-- Plainlinks
+cfg['end-box-plainlinks'] = 'plainlinks'
+
+-- cfg['toolbar-class']
+-- Class added for toolbar links.
+cfg['toolbar-class'] = 'documentation-toolbar'
+
+-- cfg['clear']
+-- Just used to clear things.
+cfg['clear'] = 'documentation-clear'
+
+
+----------------------------------------------------------------------------------------------------
+-- Tracking category configuration
+----------------------------------------------------------------------------------------------------
+
+-- cfg['display-strange-usage-category']
+-- Set to true to enable output of cfg['strange-usage-category'] if the module is used on a /doc subpage
+-- or a /testcases subpage. This should be a boolean value (either true or false).
+cfg['display-strange-usage-category'] = true
+
+-- cfg['strange-usage-category']
+-- Category to output if cfg['display-strange-usage-category'] is set to true and the module is used on a
+-- /doc subpage or a /testcases subpage.
+cfg['strange-usage-category'] = 'Wikipedia pages with strange ((documentation)) usage'
+
+--[[
+----------------------------------------------------------------------------------------------------
+-- End configuration
+--
+-- Don't edit anything below this line.
+----------------------------------------------------------------------------------------------------
+--]]
+
+return cfg
+

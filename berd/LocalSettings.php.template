@@ -1,0 +1,186 @@
+<?php
+/**
+ * ----------------------------------------------------------------------------------------
+ * This file is provided by the wikibase/wikibase docker image.
+ * This file will be passed through envsubst which will replace "${DOLLAR}" with "$".
+ * If you want to change MediaWiki or Wikibase settings then either mount a file over this
+ * template and or run a different entrypoint.
+ * ----------------------------------------------------------------------------------------
+ */
+# Check https://www.mediawiki.org/wiki/Wikibase/Installation/Advanced_configuration
+
+## Database settings
+## Environment variables will be substituted in here.
+${DOLLAR}wgDBserver = "${DB_SERVER}";
+${DOLLAR}wgDBname = "${DB_NAME}";
+${DOLLAR}wgDBuser = "${DB_USER}";
+${DOLLAR}wgDBpassword = "${DB_PASS}";
+
+## Logs
+## Save these logs inside the container
+${DOLLAR}wgDebugLogGroups = array(
+	'resourceloader' => '/var/log/mediawiki/resourceloader.log',
+	'exception' => '/var/log/mediawiki/exception.log',
+	'error' => '/var/log/mediawiki/error.log',
+);
+
+## Site Settings
+# TODO pass in the rest of this with env vars?
+${DOLLAR}wgServer = WebRequest::detectServer();
+${DOLLAR}wgShellLocale = "en_US.utf8";
+${DOLLAR}wgLanguageCode = "${MW_SITE_LANG}";
+${DOLLAR}wgSitename = "${MW_SITE_NAME}";
+${DOLLAR}wgMetaNamespace = "Project";
+# Configured web paths & short URLs
+# This allows use of the /wiki/* path
+## https://www.mediawiki.org/wiki/Manual:Short_URL
+${DOLLAR}wgScriptPath = "/w";        // this should already have been configured this way
+${DOLLAR}wgArticlePath = "/wiki/${DOLLAR}1";
+${DOLLAR}wgContentNamespaces = [ 120, 122, 0 ];
+
+${DOLLAR}baseNs = 120;
+
+# Define the namespace indexes
+define( 'WB_NS_ITEM', ${DOLLAR}baseNs );
+define( 'WB_NS_ITEM_TALK', ${DOLLAR}baseNs + 1 );
+define( 'WB_NS_PROPERTY', ${DOLLAR}baseNs + 2 );
+define( 'WB_NS_PROPERTY_TALK', ${DOLLAR}baseNs + 3 );
+
+# Define the namespaces
+${DOLLAR}wgExtraNamespaces[WB_NS_ITEM] = 'Item';
+${DOLLAR}wgExtraNamespaces[WB_NS_ITEM_TALK] = 'Item_talk';
+${DOLLAR}wgExtraNamespaces[WB_NS_PROPERTY] = 'Property';
+${DOLLAR}wgExtraNamespaces[WB_NS_PROPERTY_TALK] = 'Property_talk';
+
+# Assigning the correct entity types to the namespaces
+${DOLLAR}wgWBRepoSettings['entityNamespaces']['item'] = WB_NS_ITEM;
+${DOLLAR}wgWBRepoSettings['entityNamespaces']['property'] = WB_NS_PROPERTY;
+
+# Making the namespaces searched by default
+${DOLLAR}wgNamespacesToBeSearchedDefault[WB_NS_ITEM] = true;
+${DOLLAR}wgNamespacesToBeSearchedDefault[WB_NS_PROPERTY] = true;
+
+#${DOLLAR}wgWBRepoSettings['enableEntitySearchUI'] = false;
+
+#Set Secret
+${DOLLAR}wgSecretKey = "${MW_WG_SECRET_KEY}";
+
+## RC Age
+# https://www.mediawiki.org/wiki/Manual:$wgRCMaxAge
+# Items in the recentchanges table are periodically purged; entries older than this many seconds will go.
+# The query service (by default) loads data from recent changes
+# Set this to 1 year to avoid any changes being removed from the RC table over a shorter period of time.
+${DOLLAR}wgRCMaxAge = 365 * 24 * 3600;
+
+## Wikibase
+# Load Wikibase repo, client & lib with the example / default settings.
+${DOLLAR}wgEnableWikibaseRepo = true;
+require_once "${DOLLAR}IP/extensions/Wikibase/vendor/autoload.php";
+require_once "${DOLLAR}IP/extensions/Wikibase/lib/WikibaseLib.php";
+require_once "${DOLLAR}IP/extensions/Wikibase/repo/Wikibase.php";
+require_once "${DOLLAR}IP/extensions/Wikibase/repo/ExampleSettings.php";
+require_once "${DOLLAR}IP/extensions/Wikibase/client/WikibaseClient.php";
+require_once "${DOLLAR}IP/extensions/Wikibase/client/ExampleSettings.php";
+# OAuth
+wfLoadExtension( 'OAuth' );
+${DOLLAR}wgGroupPermissions['sysop']['mwoauthproposeconsumer'] = true;
+${DOLLAR}wgGroupPermissions['sysop']['mwoauthmanageconsumer'] = true;
+${DOLLAR}wgGroupPermissions['sysop']['mwoauthviewprivate'] = true;
+${DOLLAR}wgGroupPermissions['sysop']['mwoauthupdateownconsumer'] = true;
+
+# WikibaseImport
+require_once "${DOLLAR}IP/extensions/WikibaseImport/WikibaseImport.php";
+
+# CirrusSearch
+wfLoadExtension( 'Elastica' );
+wfLoadExtension( 'CirrusSearch' );
+wfLoadExtension( 'WikibaseCirrusSearch' );
+${DOLLAR}wgCirrusSearchServers = [ '${MW_ELASTIC_HOST}' ];
+${DOLLAR}wgSearchType = 'CirrusSearch';
+${DOLLAR}wgCirrusSearchExtraIndexSettings['index.mapping.total_fields.limit'] = 5000;
+${DOLLAR}wgWBCSUseCirrus = true;
+
+# UniversalLanguageSelector
+wfLoadExtension( 'UniversalLanguageSelector' );
+
+# cldr
+wfLoadExtension( 'cldr' );
+
+#EntitySchema
+wfLoadExtension( 'EntitySchema' );
+
+### BERD-BW ###
+
+#${DOLLAR}wgMaxShellMemory = 307200;
+
+# Define property "formatterURL" for nice links to external identifiers
+${DOLLAR}wgWBRepoSettings['formatterUrlProperty'] = 'P2';
+${DOLLAR}wgWBRepoSettings['canonicalUriProperty'] = 'P3';
+
+# Remove sitelinks 
+#${DOLLAR}wgWBRepoSettings['siteLinkGroups'] = [];
+#${DOLLAR}wgWBRepoSettings['specialSiteLinkGroups'] = [];
+
+# Anonymous users are not allowed to edit pages and to create an account (another option is 'read')
+${DOLLAR}wgGroupPermissions['*']['edit'] = false;
+${DOLLAR}wgGroupPermissions['*']['createaccount'] = false;
+${DOLLAR}wgGroupPermissions['*']['createpage'] = false;
+${DOLLAR}wgGroupPermissions['*']['createtalk'] = false;
+${DOLLAR}wgGroupPermissions['*']['writeapi'] = false;
+
+# Skin 'Timeless'
+wfLoadSkin( 'Timeless' );
+${DOLLAR}wgDefaultSkin = 'timeless';
+
+# BERD-logo
+${DOLLAR}wgLogo = "${DOLLAR}wgResourceBasePath/logo_berdc_bw.jpg";
+
+wfLoadExtension( 'TemplateStyles' );
+${DOLLAR}wgTidyConfig = [
+    'driver' => 'RaggettInternalPHP',
+    'tidyConfigFile' => "${DOLLAR}IP/includes/tidy/tidy.conf",
+];
+
+wfLoadExtension( 'TemplateData' );
+
+wfLoadExtension( 'Scribunto' );
+${DOLLAR}wgScribuntoDefaultEngine = 'luastandalone';
+
+wfLoadExtension( 'SyntaxHighlight_GeSHi' );
+
+${DOLLAR}wgLocalisationUpdateDirectory = "$IP/cache";
+${DOLLAR}wgShowExceptionDetails = true;
+
+${DOLLAR}wgJobRunRate = 1.0;
+
+#wfLoadExtension( 'ParserFunctions' );
+#${DOLLAR}wgPFEnableStringFunctions = true;
+
+#${DOLLAR}wgAllowUserJs = true;
+#${DOLLAR}wgAllowUserCss = true;
+
+#${DOLLAR}wgAllowDisplayTitle = true;
+
+# To open external link in a new window
+# ${DOLLAR}wgExternalLinkTarget = '_blank';
+
+# Increase maximum size of a page in kilobytes
+# ${DOLLAR}wgMaxArticleSize = 2048;
+# The maximum size (in bytes) of an API result.
+# Don't set this lower than $wgMaxArticleSize*1024. 
+# ${DOLLAR}wgAPIMaxResultSize = 125829120;
+
+# Set German timezone
+#${DOLLAR}wgLocaltimezone="Europe/Berlin";
+#${DOLLAR}wgLocalTZoffset = date("Z") / 60;
+#date_default_timezone_set( ${DOLLAR}wgLocaltimezone );
+# ${DOLLAR}wgObjectCacheSessionExpiry = 3600*3;
+
+# For debugging
+#${DOLLAR}wgShowDebug = true;
+#${DOLLAR}wgShowExceptionDetails = true;
+#${DOLLAR}wgShowSQLErrors = true;
+#${DOLLAR}wgDebugDumpSql  = true;
+#${DOLLAR}wgShowDBErrorBacktrace = true;
+#${DOLLAR}wgShowExceptionDetails = true;
+#${DOLLAR}wgDevelopmentWarnings = true;

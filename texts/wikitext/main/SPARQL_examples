@@ -1,0 +1,27 @@
+{{Warning| Editing this page will change the examples shown at http://localhost:8282  }}
+These basic queries help to understand [https://www.wikidata.org/wiki/Wikidata:SPARQL_tutorial SPARQL] and the [https://www.mediawiki.org/wiki/Wikibase/Indexing/RDF_Dump_Format Wikibase RDF format].
+== Items ==
+
+=== Entities with labels  ===
+
+{{SPARQL|query=
+SELECT DISTINCT ?entity ?entityLabel WHERE {
+  ?entity rdfs:label ?entityLabel.
+  FILTER((LANG(?entityLabel)) = "en")
+}
+}}
+
+=== Properties with labels, aliases, descriptions and datatypes  ===
+
+{{SPARQL|query=
+SELECT DISTINCT ?propertyWikibase ?propertyLabel ?propertyAlias ?propertyDescription ?propertyType WHERE {
+  ?propertyWikibase wikibase:directClaim ?p;
+    wikibase:propertyType ?propertyType;
+    schema:description ?propertyDescription;
+    rdfs:label ?propertyLabel.
+  FILTER((LANG(?propertyLabel)) = "en")
+  FILTER((LANG(?propertyDescription)) = "en")
+  OPTIONAL { ?propertyWikibase skos:altLabel ?propertyAlias. }
+  FILTER((LANG(?propertyAlias)) = "en")
+}
+}}

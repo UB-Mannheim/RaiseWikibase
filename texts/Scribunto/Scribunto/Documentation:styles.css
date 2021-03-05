@@ -1,0 +1,39 @@
+/* {{pp|small=yes}} */
+.documentation,
+.documentation-metadata {
+	border: 1px solid #a2a9b1;
+	background-color: #ecfcf4;
+	clear: both;
+}
+
+.documentation {
+	margin: 1em 0 0 0;
+	padding: 1em;
+}
+
+.documentation-metadata {
+	margin: 0.2em 0; /* same margin left-right as .documentation */
+    font-style: italic;
+    padding: 0.4em 1em; /* same padding left-right as .documentation */
+}
+
+.documentation-startbox {
+	padding-bottom: 3px;
+	border-bottom: 1px solid #aaa;
+	margin-bottom: 1ex;
+}
+
+.documentation-heading {
+	font-weight: bold;
+	font-size: 125%;
+}
+
+.documentation-clear { /* Don't want things to stick out where they shouldn't. */
+	clear: both;
+}
+
+.documentation-toolbar {
+	font-style: normal;
+	font-size: 85%;
+}
+
