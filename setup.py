@@ -6,7 +6,7 @@ with open("README.md", "r") as fh:
     long_description = fh.read()
 
 setup(
-    name="bbw",
+    name="RaiseWikibase",
     author="Renat Shigapov, Joerg Mechnich, Irene Schumm",
     license="MIT",
     description="RaiseWikibase: Fast inserts into a Wikibase instance",
