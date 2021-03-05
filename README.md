@@ -26,7 +26,7 @@ First, check the [Wikibase Data Model](https://www.mediawiki.org/wiki/Wikibase/D
 from RaiseWikibase.datamodel import label, alias, description, snak, claim, entity, namespaces, datatypes
 ```
 
-To create the JSON representation of an item with with the English label `Wikibase`, try:
+To create the JSON representation of an item with the English label `Wikibase`, try:
 ```python
 itemjson = entity(labels=label(value='Wikibase'), etype='item')
 ```
