@@ -47,7 +47,7 @@ It saves the CSV files with results and creates the pdf files with figures in `.
 
 | (1a) Wikitexts | (1b) Items |
 |:------:|:------:|
-| ![alt text](https://github.com/UB-Mannheim/RaiseWikibase/tree/main/experiments/exp1.png) | ![alt text](https://github.com/UB-Mannheim/RaiseWikibase/tree/main/experiments/exp2.png) |
+| ![alt text](https://github.com/UB-Mannheim/RaiseWikibase/blob/main/experiments/exp1.png) | ![alt text](https://github.com/UB-Mannheim/RaiseWikibase/blob/main/experiments/exp2.png) |
 
 The insert rate in pages per second is shown at Fig. 1a for wikitexts and at Fig 1b for items. Every data point correspond to a batch of ten thousands pages. At Fig. 1a six different data points correspond to six repeated experiments. At Fig 1b two colors correspond to two repeated experiments and three shapes of a data point correspond to three cases: 1) circle - each claim without a qualifier and without a reference, 2) x - each claim with one qualifier and without a reference, and 3) square - each claim with one qualifier and one reference.
 
