@@ -6,8 +6,9 @@
 
 ## Table of contents
 - [How to use](#how-to-use)
-- [Performance experiments](#performance)
+- [Performance analysis](#performance)
 - [A reusable example of the BERD knowledge graph construction](#example)
+- [Deployment in production](#deployment)
 
 ## How to use
 
@@ -37,7 +38,7 @@ from RaiseWikibase.raiser import batch
 batch(content_model='wikibase-item', texts=[itemjson for i in range(1000)])
 ```
 
-## Performance experiments
+## Performance analysis
 
 The script runs two performance experiments for creating the wikitexts and items. Run it in shell:
 ```shell
@@ -65,11 +66,8 @@ Run:
 python3 RaisingBERD.py
 ```
 
+## Deployment in production
 
+The setting above runs on localhost.
 
-
-
-
-
-
-
+A [setup](https://stackoverflow.com/a/63397827) for deployment using Nginx is provided by Louis Poncet ([personaldata.io](https://wiki.personaldata.io)).
