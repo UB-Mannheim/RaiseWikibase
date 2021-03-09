@@ -41,9 +41,10 @@ batch(content_model='wikibase-item', texts=[itemjson for i in range(1000)])
 ```
 
 Let `wtext` is a Python string representing a wikitext. Then, `wikitexts = [wtext for i in range(1000)]` is a list of wikitexts and `page_titles` is a list of the corresponding page titles. To create one thousand wikitexts in the main namespace, use:
+
 ```python
 batch(content_model='wikitext', texts=wikitexts, namespace=0, page_title=page_titles)
-``
+```
 
 The dictionary of namespaces can be found here:
 ```python
