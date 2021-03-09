@@ -6,9 +6,9 @@
 
 ## Table of contents
 - [How to use](#how-to-use)
-- [Performance analysis](#performance)
-- [A reusable example of the BERD knowledge graph construction](#example)
-- [Deployment in production](#deployment)
+- [Performance analysis](#performance-analysis)
+- [A reusable example of the BERD knowledge graph construction](#a-reusable-example-of-the-berd-knowledge-graph-construction)
+- [Deployment in production](#deployment-in-production)
 
 ## How to use
 
