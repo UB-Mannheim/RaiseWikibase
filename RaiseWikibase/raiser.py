@@ -1,6 +1,6 @@
 from RaiseWikibase.dbconnection import DBConnection
 from RaiseWikibase.datamodel import namespaces
-from RaiseWikibase.utils import get_ip
+from RaiseWikibase.utils import get_ip, execute_shell
 from RaiseWikibase.settings import Settings
 import uuid
 import json
