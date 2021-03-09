@@ -22,21 +22,35 @@ Check whether it's running using `docker-compose logs -f`.
 
 ### Functionality
 
-First, check the [Wikibase Data Model](https://www.mediawiki.org/wiki/Wikibase/DataModel) and try RaiseWikibase functions for it:
+First, check the [Wikibase Data Model](https://www.mediawiki.org/wiki/Wikibase/DataModel) and import the RaiseWikibase functions for it:
 ```python
-from RaiseWikibase.datamodel import label, alias, description, snak, claim, entity, namespaces, datatypes
+from RaiseWikibase.datamodel import label, alias, description, snak, claim, entity
 ```
+
+The functions `entity()`, `claim()`, `snak()`, `description()`, `alias()`and `label()` return the template dictionaries. So all basic operations with dictionaries can be used.
 
 To create the JSON representation of an item with the English label 'Wikibase', try:
 ```python
 itemjson = entity(labels=label(value='Wikibase'), etype='item')
 ```
 
-To create one thousand of items with that JSON representation, try:
+To create one thousand items with that JSON representation, use:
 ```python
 from RaiseWikibase.raiser import batch
 batch(content_model='wikibase-item', texts=[itemjson for i in range(1000)])
 ```
+
+Let `wtext` is a Python string representing a wikitext. Then, `wikitexts = [wtext for i in range(1000)]` is a list of wikitexts and `page_titles` is a list of the corresponding page titles. To create one thousand wikitexts in the main namespace, use:
+```python
+batch(content_model='wikitext', texts=wikitexts, namespace=0, page_title=page_titles)
+``
+
+The dictionary of namespaces can be found here:
+```python
+from RaiseWikibase.datamodel import namespaces
+```
+
+For example, the code for the main namespace `namespaces['main']` is `0`.
 
 ## Performance analysis
 
@@ -50,7 +64,7 @@ It saves the CSV files with results and creates the pdf files with figures in `.
 |:------:|:------:|
 | ![alt text](https://github.com/UB-Mannheim/RaiseWikibase/blob/main/experiments/exp1.png) | ![alt text](https://github.com/UB-Mannheim/RaiseWikibase/blob/main/experiments/exp2.png) |
 
-The insert rate in pages per second is shown at Fig. 1a for wikitexts and at Fig 1b for items. Every data point correspond to a batch of ten thousands pages. At Fig. 1a six different data points correspond to six repeated experiments. At Fig 1b two colors correspond to two repeated experiments and three shapes of a data point correspond to three cases: 1) circle - each claim without a qualifier and without a reference, 2) x - each claim with one qualifier and without a reference, and 3) square - each claim with one qualifier and one reference.
+The insert rate in pages per second is shown at Figure 1a for wikitexts and at Figure 1b for items. Every data point correspond to a batch of ten thousands pages. At Figure 1a six different data points correspond to six repeated experiments. At Figure 1b two colors correspond to two repeated experiments and three shapes of a data point correspond to three cases: 1) circle - each claim without a qualifier and without a reference, 2) x - each claim with one qualifier and without a reference, and 3) square - each claim with one qualifier and one reference.
 
 ## A reusable example of the BERD knowledge graph construction
 
