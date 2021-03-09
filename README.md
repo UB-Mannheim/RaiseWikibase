@@ -7,6 +7,7 @@
 ## Table of contents
 - [How to use](#how-to-use)
 - [Performance analysis](#performance-analysis)
+- [Creating a mini Wikibase instance in a few minutes](#creating-a-mini-wikibase-instance-in-a-few-minutes)
 - [A reusable example of the BERD knowledge graph construction](#a-reusable-example-of-the-berd-knowledge-graph-construction)
 - [Deployment in production](#deployment-in-production)
 
@@ -66,6 +67,19 @@ It saves the CSV files with results and creates the pdf files with figures in `.
 | ![alt text](https://github.com/UB-Mannheim/RaiseWikibase/blob/main/experiments/exp1.png) | ![alt text](https://github.com/UB-Mannheim/RaiseWikibase/blob/main/experiments/exp2.png) |
 
 The insert rate in pages per second is shown at Figure 1a for wikitexts and at Figure 1b for items. Every data point correspond to a batch of ten thousands pages. At Figure 1a six different data points correspond to six repeated experiments. At Figure 1b two colors correspond to two repeated experiments and three shapes of a data point correspond to three cases: 1) circle - each claim without a qualifier and without a reference, 2) x - each claim with one qualifier and without a reference, and 3) square - each claim with one qualifier and one reference.
+
+## Creating a mini Wikibase instance in a few minutes
+
+The script fills a fresh Wikibase instance with 8400+ properties from Wikidata in roughly 30 seconds. Additional seven seconds are needed to query the Wikidata endpoint. Run:
+```shell
+python3 miniWikibase.py
+```
+
+| (2a) Main page | (2b) Properties |
+|:------:|:------:|
+| ![alt text](https://github.com/UB-Mannheim/RaiseWikibase/blob/main/experiments/mini1.png) | ![alt text](https://github.com/UB-Mannheim/RaiseWikibase/blob/main/experiments/mini2.png) |
+
+Figure 2a shows the main page and Figure 2b shows a list of properties. If you run the script `miniWikibase.py` with the commented line 156, you will see only the property identifiers instead of the labels. You can either uncomment line 156 or run in shell `docker-compose down` and `docker-compose up -d`.
 
 ## A reusable example of the BERD knowledge graph construction
 
