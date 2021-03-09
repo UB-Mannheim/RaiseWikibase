@@ -60,7 +60,10 @@ The script runs two performance experiments for creating the wikitexts and items
 ```shell
 python3 performance.py
 ```
-It saves the CSV files with results and creates the pdf files with figures in `./experiments/`.
+
+The variable `batch_lengths` is set to `[100]`. This means the length of a batch in each experiment is `100`. Running both experiments in this case takes 80 seconds. To reproduce Figures 1a and 1b, set `batch_lengths` to `[10000]`.
+
+The script saves the CSV files with numeric values of results and creates the pdf files with figures in `./experiments/`.
 
 | (1a) Wikitexts | (1b) Items |
 |:------:|:------:|

@@ -35,6 +35,10 @@ def item_claim(nc=1, extra=0):
 
 
 if __name__ == "__main__":
+    time1 = time.time()
+    batch_lengths = [100] # a list of batch lenghts used in experiments; 
+    # the length of batch 10000 makes it time consuming;
+    # start with 100, then running both experiments takes 80 seconds
     dir_experiments = './experiments/'
     connection = DBConnection()
     ## Experiment 1
@@ -43,7 +47,7 @@ if __name__ == "__main__":
     for k in [1, 2, 3, 4, 5, 6]:  # number of a test
         for nc in [500, 1000, 1500, 2000, 2500, 3000, 3500, 4000, 4500, 5000, 5500, 6000]:  # length of a page
             t = ''.join(random.choice(letters) for i in range(nc))
-            for nn in [10000]:  # length of the batch
+            for nn in batch_lengths:  # length of the batch
                 time0 = time.time()
                 batch('wikitext', [t for m in range(nn)], 0, [str(random.random()) for m in range(nn)])
                 nt = time.time() - time0
@@ -67,7 +71,7 @@ if __name__ == "__main__":
         # 2 - each claim with one qualifer and one reference.
         for k in [1, 2]:  # number of a test
             for nc in [1, 3, 5, 7, 9, 11, 13, 15, 17, 19, 21]:  # number of claims per item
-                for nn in [10000]:  # length of the batch
+                for nn in batch_lengths:  # length of the batch
                     it = item_claim(nc, e)
                     time0 = time.time()
                     batch('wikibase-item', [it for m in range(nn)])
@@ -83,3 +87,5 @@ if __name__ == "__main__":
     ax = sns.scatterplot(data=d, y="Speed in pages per second", x="Number of claims per page", hue="Run", style="Extra",
                          s=180, legend=False)
     ax.figure.savefig(dir_experiments + 'exp2.pdf', dpi=300, bbox_inches='tight')
+
+    print(time.time()-time1)
