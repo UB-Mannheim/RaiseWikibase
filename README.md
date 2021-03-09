@@ -57,7 +57,7 @@ For example, the code for the main namespace `namespaces['main']` is `0`.
 
 The script runs two performance experiments for creating the wikitexts and items. Run it in shell:
 ```shell
-python3 RaisingWikibase.py
+python3 performance.py
 ```
 It saves the CSV files with results and creates the pdf files with figures in `./experiments/`.
 
