@@ -2,12 +2,28 @@ import uuid
 
 
 def label(language='en', value=''):
-    """Create and return a label (dict)"""
+    """Create and return a label (dict)
+    
+    :param language: language code used for the label, default is 'en'
+    :type language: str
+    :param value: a label in the specified language
+    :type value: str
+    :return: a dictionary with a label in the specified language
+    :rtype: dict
+    """
     return {language: {'language': language, 'value': value}}
 
 
 def alias(language='en', value=''):
-    """Create and return an alias (dict)"""
+    """Create and return an alias (dict)
+    
+    :param language: language code used for the alias, default is 'en'
+    :type language: str
+    :param value: an alias or aliases in the specified language
+    :type value: str or list of str
+    :return a: a dictionary with aliases in the specified language
+    :rtype a: dict
+    """
     a = {}
     if len(value) == 0:
         a[language] = [{'language': language, 'value': ''}]
@@ -17,12 +33,39 @@ def alias(language='en', value=''):
 
 
 def description(language='en', value=''):
-    """Create and return a description (dict)"""
+    """Create and return a description (dict)
+    
+    :param language: language code used for the description, default is 'en'
+    :type language: str
+    :param value: a description in the specified language
+    :type value: str
+    :return: a dictionary with a description in the specified language
+    :rtype: dict
+    """
     return {language: {'language': language, 'value': value}}
 
 
 def snak(datatype='', value='', prop='', snaktype='value'):
-    """Create and return a snak (dict)"""
+    """Create and return a snak (dict)
+    
+    :param datatype: a one of 18 datatypes in the Wikibase data model
+    :type datatype: str
+    :param value: datavalue
+    :type value: str for datatype in ['', 'string', 'math', 'external-id', 
+                                      'url', 'commonsMedia', 'localMedia',
+                                      'geo-shape', 'musical-notation', 'tabular-data',
+                                      'wikibase-item', 'wikibase-property',
+                                      'wikibase-lexeme', 'wikibase-form',
+                                      'wikibase-sense']
+                list for datatype in ['time', 'monolingualtext', 'quantity',
+                                      'globe-coordinate']
+    :param prop: A property ID for the snak
+    :type prop: str
+    :param snaktype: A type of this snak, i.e., one of ['value', 'novalue', 'somevalue'],
+                    default is 'value'
+    :return snak: a template dictionary with a snak
+    :rtype snak: dict
+    """
     if datatype in ['', 'string', 'math', 'external-id', 'url', 'commonsMedia',
                     'localMedia', 'geo-shape', 'musical-notation', 'tabular-data']:
         datavalue = {
@@ -129,7 +172,19 @@ def snak(datatype='', value='', prop='', snaktype='value'):
 
 
 def claim(prop='', mainsnak=snak(), qualifiers=[], references=[]):
-    """Create and return a claim (dict)"""
+    """Create and return a claim (dict)
+    
+    :param prop: The property identifier for this claim
+    :type prop: str
+    :param mainsnak: the main snak for this claim
+    :type mainsnak: dict
+    :param qualifiers: a list of qualifiers
+    :type qualifiers: list
+    :param references: a list of references
+    :type references: list
+    :return: a dictionary with a claim
+    :rtype: dict
+    """
     return {prop: [{'mainsnak': {**mainsnak, **{'hash': str(uuid.uuid4())}},
                      'type': 'statement',
                      'rank': 'normal',
@@ -140,7 +195,23 @@ def claim(prop='', mainsnak=snak(), qualifiers=[], references=[]):
 
 
 def entity(labels={}, aliases={}, descriptions={}, claims={}, etype='', datatype=''):
-    """Create and return an entity (dict)"""
+    """Create and return an entity (dict)
+    
+    :param labels: A dictionary with labels. Default is empty dict.
+    :type labels: dict
+    :param aliases: A dictionary with aiases. Default is empty dict.
+    :type aliases: dict
+    :param descriptions: A dictionary with descriptions. Default is empty dict.
+    :type descriptions: dict
+    :param claims: A dictionary with claims. Default is empty dict.
+    :type claims: dict
+    :param etype: Entity type. For example, 'item' or 'property'.
+    :type etype: str
+    :param datatype: A datatype of an entity. This applies only to 'etype'=='property'.
+    :type datatype: str
+    :return entity: a dictionary with JSON representation of an entity
+    :rtype entity: dict
+    """
     entity = {'type': etype,
               'datatype': datatype,
               'id': '',
