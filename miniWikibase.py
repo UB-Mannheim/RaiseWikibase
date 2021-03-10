@@ -138,7 +138,7 @@ if __name__ == "__main__":
 
     time0 = time.time()
 
-    # Create first four properties in a local Wikibase
+    # Create first three properties in a local Wikibase
     p1 = property_wid()
     p2 = property_wd('P1630')
     p3 = property_wd('P1921')
