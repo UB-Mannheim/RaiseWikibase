@@ -2,7 +2,7 @@ import uuid
 
 
 def label(language='en', value=''):
-    """Create and return a label (dict)
+    """Create and return the JSON representation of a label (dict)
     
     :param language: language code used for the label, default is 'en'
     :type language: str
@@ -15,7 +15,7 @@ def label(language='en', value=''):
 
 
 def alias(language='en', value=''):
-    """Create and return an alias (dict)
+    """Create and return the JSON representation of an alias (dict)
     
     :param language: language code used for the alias, default is 'en'
     :type language: str
@@ -33,7 +33,7 @@ def alias(language='en', value=''):
 
 
 def description(language='en', value=''):
-    """Create and return a description (dict)
+    """Create and return the JSON representation of a description (dict)
     
     :param language: language code used for the description, default is 'en'
     :type language: str
@@ -46,7 +46,7 @@ def description(language='en', value=''):
 
 
 def snak(datatype='', value='', prop='', snaktype='value'):
-    """Create and return a snak (dict)
+    """Create and return the JSON representation of a snak (dict)
     
     :param datatype: a one of 18 datatypes in the Wikibase data model
     :type datatype: str
@@ -63,6 +63,7 @@ def snak(datatype='', value='', prop='', snaktype='value'):
     :type prop: str
     :param snaktype: A type of this snak, i.e., one of ['value', 'novalue', 'somevalue'],
                     default is 'value'
+    :type snaktype: str
     :return snak: a template dictionary with a snak
     :rtype snak: dict
     """
@@ -172,7 +173,7 @@ def snak(datatype='', value='', prop='', snaktype='value'):
 
 
 def claim(prop='', mainsnak=snak(), qualifiers=[], references=[]):
-    """Create and return a claim (dict)
+    """Create and return the JSON representation of a claim (dict)
     
     :param prop: The property identifier for this claim
     :type prop: str
@@ -195,7 +196,7 @@ def claim(prop='', mainsnak=snak(), qualifiers=[], references=[]):
 
 
 def entity(labels={}, aliases={}, descriptions={}, claims={}, etype='', datatype=''):
-    """Create and return an entity (dict)
+    """Create and return the JSON representation of an entity (dict)
     
     :param labels: A dictionary with labels. Default is empty dict.
     :type labels: dict
