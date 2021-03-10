@@ -11,6 +11,7 @@
 - [Creating a mini Wikibase instance in a few minutes](#creating-a-mini-wikibase-instance-in-a-few-minutes)
 - [A reusable example of the BERD knowledge graph construction](#a-reusable-example-of-the-berd-knowledge-graph-construction)
 - [Deployment in production](#deployment-in-production)
+- [Acknowledgments](#acknowledgments)
 
 ## How to use
 
@@ -112,3 +113,9 @@ python3 RaisingBERD.py
 The setting above runs on localhost.
 
 A [setup](https://stackoverflow.com/a/63397827) for deployment using Nginx is provided by Louis Poncet ([personaldata.io](https://wiki.personaldata.io)).
+
+## Acknowledgments
+
+This work was funded by the Ministry of Science, Research and Arts of Baden-Württemberg through the project [Business and Economics Research Data Center Baden-Württemberg](https://www.berd-bw.de).
+
+We thank [Jesper Zedlitz](https://github.com/jze) for his experiments explained at [the FactGrid blog](https://blog.factgrid.de/archives/2013) and for his open source code [wikibase-insert](https://github.com/jze/wikibase-insert).
