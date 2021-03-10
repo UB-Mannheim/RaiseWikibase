@@ -123,7 +123,7 @@ def fill_texts():
                 else:
                     cm = cmodel
                 text = file.read_text("utf-8")
-                print(ns, pt, cmodel)
+                #print(ns, pt, cmodel)
                 page(connection, cm, ns, text, pt, True)
     # Fill the Main page separately
     pt = "Main_Page"
@@ -155,4 +155,4 @@ if __name__ == "__main__":
     # or run in shell 'docker-compose down' and 'docker-compose up -d' again
     # building_indexing() 
 
-    print(time.time() - time0)
+    print('Total time in seconds: ', time.time() - time0)
