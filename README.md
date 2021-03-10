@@ -2,6 +2,7 @@
 
 * Fast inserts into a Wikibase instance.
 * Creates up to a million entities and wikitexts per hour.
+* Creates a mini Wikibase instance with Wikidata properties in a few minutes.
 * Includes a reusable example of the BERD knowledge graph construction.
 
 ## Table of contents
@@ -19,7 +20,15 @@ Clone or download the RaiseWikibase directory.
 
 Copy `env.tmpl` to `.env` and substitute the default values with your
 own usernames and passwords. Run `docker-compose up -d` in the main RaiseWikibase folder. 
-Check whether it's running using `docker-compose logs -f`.
+If you run it first time, it pulls the Wikibase Docker images. Then it builds, creates, starts, and attaches to containers for a service.
+Check whether it's running using `docker ps`. The logs can viewed via `docker-compose logs -f`. As soon as you see the output (without errors) from `wdqs-updater_1` in the logs, the Wikibase front-end and query service are available and data filling can be started.
+
+If you want to stop the Wikibase Docker, to remove all your uploaded data and to run a fresh Wikibase instance, use:
+```shell
+docker-compose down
+sudo rm -rf mediawiki-*  query-service-data/ quickstatements-data/
+docker-compose up -d
+```
 
 ### Functionality
 
