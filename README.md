@@ -66,7 +66,7 @@ For example, the code for the main namespace `namespaces['main']` is `0`.
 
 ## Performance analysis
 
-The script runs two performance experiments for creating the wikitexts and items. Run it in shell:
+The script `performance.py` runs two performance experiments for creating the wikitexts and items. Run it in shell:
 ```shell
 python3 performance.py
 ```
@@ -83,7 +83,7 @@ The insert rate in pages per second is shown at Figure 1a for wikitexts and at F
 
 ## Creating a mini Wikibase instance in a few minutes
 
-The script fills a fresh Wikibase instance with 8400+ properties from Wikidata in roughly 30 seconds. Additional seven seconds are needed to query the Wikidata endpoint. Run:
+The script `miniWikibase.py` fills a fresh Wikibase instance with some structured and unstructured data in roughly 30 seconds. The data include 8400+ properties from Wikidata, two templates, a page with SPARQL examples, a page with a sidebar and modules. Check the folder `texts` containing unstructured data and add there you own data. Information about the Wikidata properties is queried through the Wikidata endpoint and it takes a few seconds. Run:
 ```shell
 python3 miniWikibase.py
 ```
@@ -96,7 +96,7 @@ Figure 2a shows the main page and Figure 2b shows a list of properties. If you r
 
 ## A reusable example of the BERD knowledge graph construction
 
-The script creates a knowledge graph from scratch. Before running it prepare the OpenCorporates dataset.
+The script `RaisingBERD.py` creates a knowledge graph from scratch. Before running it prepare the OpenCorporates dataset.
 Download https://daten.offeneregister.de/openregister.db.gz. Unzip it and run in shell:
 ```shell
 sqlite3 -header -csv handelsregister.db "select * from company;" > millions_companies.csv
