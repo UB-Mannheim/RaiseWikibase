@@ -30,7 +30,7 @@ The versions of the RaiseWikibase related libraries can be found in `setup.py`.
 
 ### Wikibase Docker
 
-RaiseWikibase is solely based on [Wikibase Docker](https://github.com/wmde/wikibase-docker) developed by [Wikimedia Germany](https://wikimedia.de). It significantly simplifies deployment of a Wikibase instance. The versions of the Wikibase related software can be found in `docker-compose.yml`: `wikibase:1.35-bundle`, `mariadb:10.3`, `wdqs:0.3.40` and `elasticsearch:6.5.4-extra`. The image `wdqs:0.3.40` is a Wikibase specific [Blazegraph](https://blazegraph.com) image.
+RaiseWikibase is solely based on [Wikibase Docker](https://github.com/wmde/wikibase-docker) developed by [Wikimedia Germany](https://wikimedia.de). [Wikibase Docker](https://github.com/wmde/wikibase-docker) significantly simplifies deployment of a Wikibase instance. The versions of the Wikibase related software can be found in `docker-compose.yml`: `wikibase:1.35-bundle`, `mariadb:10.3`, `wdqs:0.3.40` and `elasticsearch:6.5.4-extra`. The image `wdqs:0.3.40` is a Wikibase specific [Blazegraph](https://blazegraph.com) image.
 
 Copy `env.tmpl` to `.env` and substitute the default values with your
 own usernames and passwords.
@@ -49,14 +49,14 @@ docker ps
 If it's running, the output is like this:
 ```shell
 CONTAINER ID        IMAGE                                COMMAND                   CREATED              STATUS              PORTS                       NAMES
-0cac985f00a5        wikibase/quickstatements:latest      "/bin/bash /entrypoi..."    About a minute ago   Up About a minute   0.0.0.0:9191->80/tcp        raisewikibase_quickstatements_1
-2f277b599ea0        wikibase/wdqs:0.3.40                 "/entrypoint.sh /run..."    About a minute ago   Up About a minute                               raisewikibase_wdqs-updater_1
-3d7e6462b290        wikibase/wdqs-frontend:latest        "/entrypoint.sh ngin..."    About a minute ago   Up About a minute   0.0.0.0:8282->80/tcp        raisewikibase_wdqs-frontend_1
-ef945d05fc88        wikibase/wikibase:1.35-bundle        "/bin/bash /entrypoi..."    About a minute ago   Up About a minute   0.0.0.0:8181->80/tcp        raisewikibase_wikibase_1
-10df54332657        wikibase/wdqs-proxy                  "/bin/sh -c \"/entryp..."   About a minute ago   Up About a minute   0.0.0.0:8989->80/tcp        raisewikibase_wdqs-proxy_1
-37f34328b73f        wikibase/wdqs:0.3.40                 "/entrypoint.sh /run..."    About a minute ago   Up About a minute   9999/tcp                    raisewikibase_wdqs_1
-9a1c8ddd8c89        wikibase/elasticsearch:6.5.4-extra   "/usr/local/bin/dock..."    About a minute ago   Up About a minute   9200/tcp, 9300/tcp          raisewikibase_elasticsearch_1
-b640eaa556e3        mariadb:10.3                         "docker-entrypoint.s..."    About a minute ago   Up About a minute   127.0.0.1:63306->3306/tcp   raisewikibase_mysql_1
+0cac985f00a5        wikibase/quickstatements:latest      "/bin/bash /entrypoi…"    About a minute ago   Up About a minute   0.0.0.0:9191->80/tcp        raisewikibase_quickstatements_1
+2f277b599ea0        wikibase/wdqs:0.3.40                 "/entrypoint.sh /run…"    About a minute ago   Up About a minute                               raisewikibase_wdqs-updater_1
+3d7e6462b290        wikibase/wdqs-frontend:latest        "/entrypoint.sh ngin…"    About a minute ago   Up About a minute   0.0.0.0:8282->80/tcp        raisewikibase_wdqs-frontend_1
+ef945d05fc88        wikibase/wikibase:1.35-bundle        "/bin/bash /entrypoi…"    About a minute ago   Up About a minute   0.0.0.0:8181->80/tcp        raisewikibase_wikibase_1
+10df54332657        wikibase/wdqs-proxy                  "/bin/sh -c \"/entryp…"   About a minute ago   Up About a minute   0.0.0.0:8989->80/tcp        raisewikibase_wdqs-proxy_1
+37f34328b73f        wikibase/wdqs:0.3.40                 "/entrypoint.sh /run…"    About a minute ago   Up About a minute   9999/tcp                    raisewikibase_wdqs_1
+9a1c8ddd8c89        wikibase/elasticsearch:6.5.4-extra   "/usr/local/bin/dock…"    About a minute ago   Up About a minute   9200/tcp, 9300/tcp          raisewikibase_elasticsearch_1
+b640eaa556e3        mariadb:10.3                         "docker-entrypoint.s…"    About a minute ago   Up About a minute   127.0.0.1:63306->3306/tcp   raisewikibase_mysql_1
 ```
 
 The logs can viewed via:
@@ -147,12 +147,12 @@ Let `wtext` is a Python string representing a wikitext. Then, `wikitexts = [wtex
 batch(content_model='wikitext', texts=wikitexts, namespace=0, page_title=page_titles)
 ```
 
-The dictionary of namespaces can be found here:
+The dictionary of [namespaces](https://www.mediawiki.org/wiki/Extension_default_namespaces) can be found here:
 ```python
 from RaiseWikibase.datamodel import namespaces
 ```
 
-For example, the code for the main namespace `namespaces['main']` is `0`.
+The ID for the main namespace `namespaces['main']` is `0`.
 
 ## Performance analysis
 
