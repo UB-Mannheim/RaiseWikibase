@@ -101,7 +101,7 @@ aliases = {**alias('en', ['organisation', 'org']), **alias('de', ['Org', 'Orga']
 Multilingual descriptions can be added:
 ```python
 descriptions = {**description('en', 'social entity (not necessarily commercial)'),
-				**description('de', 'soziale Struktur mit einem gemeinsamen Ziel')}
+		**description('de', 'soziale Struktur mit einem gemeinsamen Ziel')}
 ```
 
 To add statements (claims), qualifiers and references, we need a `snak()` function. To create a snak, we have to specify `property`, `datavalue`, `datatype` and `snaktype`. For example, if our Wikibase instance has the property with ID `P1`, a label `Wikidata ID` and datatype `external-id`, we can create a mainsnak with that property and the value 'Q43229':
@@ -128,7 +128,7 @@ item = entity(labels=labels, aliases=aliases, descriptions=descriptions, claims=
 If the property needs to be created, the datatype has to be additionally specified:
 ```python
 property = entity(labels=labels, aliases=aliases, descriptions=descriptions,
-				  claims=claims, etype='property', datatype='string')
+		  claims=claims, etype='property', datatype='string')
 ```
 
 Note that these functions create only the dictionaries for the corresponding elements of the Wikibase Data Model. Writing into the database happens using the `page` and `batch` functions.
