@@ -24,8 +24,7 @@ services:
       - ./berd/LocalSettings.php.template:/LocalSettings.php.template
       - ./berd/logo_berdc_bw.jpg:/var/www/html/logo_berdc_bw.jpg
       - ./berd/TimelessTemplate.php:/var/www/html/skins/Timeless/includes/TimelessTemplate.php
-      #- ./extensions/TemplateStyles:/var/www/html/extensions/TemplateStyles
-      #- ./extensions/createOAuthConsumer.php:/var/www/html/extensions/OAuth/maintenance/createOAuthConsumer.php
+      # - ./extensions/TemplateStyles:/var/www/html/extensions/TemplateStyles
     depends_on:
     - mysql
     - elasticsearch
@@ -34,7 +33,6 @@ services:
       default:
         aliases:
          - ${CONCEPT_URI_HOST}
-#         - wikibase.svc
     environment:
       - DB_SERVER=mysql.svc:3306
       - MW_ELASTIC_HOST=elasticsearch.svc
