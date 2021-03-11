@@ -17,7 +17,11 @@ def execute_shell(command):
 
     
 def get_ip():
-    """Get and return ip-address (str)"""
+    """Get and return ip-address (str)
+
+    :return ip: ip-address of a user
+    :rtype ip: str
+    """
     s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
     s.connect(("8.8.8.8", 80))
     ip = s.getsockname()[0]
@@ -29,6 +33,11 @@ def get_wikidata_properties(language='en'):
     """
     Get dataframe with the PIDs, labels, aliases, descriptions and
     datatypes of all properties in Wikidata.
+
+    :param language: A language code for labels, descriptions and aliases. Default is 'en'.
+    :type language: str
+    :return output: a dataframe with basic info about properties queried from the Wikidata endpoint
+    :rtype output: pandas.DataFrame or None
     """
     url = "https://query.wikidata.org/sparql"
     query = """
