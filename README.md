@@ -3,13 +3,13 @@
 * Fast inserts into a Wikibase instance.
 * Creates up to a million entities and wikitexts per hour.
 * Creates a mini Wikibase instance with Wikidata properties in a few minutes.
-* Includes a reusable example of the BERD knowledge graph construction.
+* Creates the BERD knowledge graph with millions of entities in a few hours.
 
 ## Table of contents
 - [How to use](#how-to-use)
 - [Performance analysis](#performance-analysis)
 - [Creating a mini Wikibase instance in a few minutes](#creating-a-mini-wikibase-instance-in-a-few-minutes)
-- [A reusable example of the BERD knowledge graph construction](#a-reusable-example-of-the-berd-knowledge-graph-construction)
+- [Creating the BERD instance with millions of entities in a few hours](#creating-the-berd-instance-with-millions-of-entities-in-a-few-hours)
 - [Deployment in production](#deployment-in-production)
 - [Acknowledgments](#acknowledgments)
 
@@ -31,7 +31,7 @@ pip3 install -e .
 Copy `env.tmpl` to `.env` and substitute the default values with your
 own usernames and passwords. Run `docker-compose up -d` in the main RaiseWikibase folder. 
 If you run it first time, it pulls the Wikibase Docker images. Then it builds, creates, starts, and attaches to containers for a service.
-Check whether it's running using `docker ps`. The logs can viewed via `docker-compose logs -f`. As soon as you see the output (without errors) from `wdqs-updater_1` in the logs, the Wikibase front-end and query service are available and data filling can be started.
+Check whether it's running using `docker ps`. The logs can viewed via `docker-compose logs -f`. As soon as you see the output (without errors) from `wdqs-updater_1` in the logs, the Wikibase front-end (http://localhost:8181) and query service (http://localhost:8282) are available and data filling can be started.
 
 If you want to stop the Wikibase Docker, to remove all your uploaded data and to run a fresh Wikibase instance, use:
 ```shell
@@ -40,24 +40,70 @@ sudo rm -rf mediawiki-*  query-service-data/ quickstatements-data/
 docker-compose up -d
 ```
 
-### Functionality
+### Wikibase Data Model and RaiseWikibase functions for it
 
-First, check the [Wikibase Data Model](https://www.mediawiki.org/wiki/Wikibase/DataModel) and import the RaiseWikibase functions for it:
+The [Wikibase Data Model](https://www.mediawiki.org/wiki/Wikibase/DataModel) is an ontology describing the structure of the data in Wikibase. A non-technical summary of the Wikibase model is available at [DataModel/Primer](https://www.mediawiki.org/wiki/Wikibase/DataModel/Primer). The initial [conceptual specification](https://www.mediawiki.org/wiki/Wikibase/DataModel)
+for the Data Model was created by [Markus Krötzsch](http://korrekt.org/)
+and [Denny Vrandečić](http://simia.net/wiki/Denny), with minor contributions by
+Daniel Kinzler and Jeroen De Dauw. The Wikibase Data Model has been implemented by [Jeroen De Dauw](https://www.EntropyWins.wtf)
+and Thiemo Kreuz as [Wikimedia Germany](https://wikimedia.de) employees for the [Wikidata project](https://wikidata.org/).
+
+RaiseWikibase provides the functions for the Wikibase Data Model:
 ```python
 from RaiseWikibase.datamodel import label, alias, description, snak, claim, entity
 ```
 
-The functions `entity()`, `claim()`, `snak()`, `description()`, `alias()`and `label()` return the template dictionaries. So all basic operations with dictionaries can be used.
+The functions `entity()`, `claim()`, `snak()`, `description()`, `alias()`and `label()` return the template dictionaries. So all basic operations with dictionaries in Python can be used. You can merge two dictionaries `X` and `Y` using `X | Y` (since Python 3.9) and using `{**X, **Y}` (since Python 3.5).
 
-To create the JSON representation of an item with the English label 'Wikibase', try:
+Let's check the Wikidata entity [Q43229](https://www.wikidata.org/wiki/Q43229). You can create both English and German labels for the entity using RaiseWikibase:
 ```python
-itemjson = entity(labels=label(value='Wikibase'), etype='item')
+labels = {**label('en', 'organization'), **label('de', 'Organisation')}
 ```
 
-To create one thousand items with that JSON representation, use:
+Multiple English and German aliases can also be easily created:
+```python
+aliases = {**alias('en', ['organisation', 'org']), **alias('de', ['Org', 'Orga'])}
+```
+
+Multilingual descriptions can be added:
+```python
+descriptions = {**description('en', 'social entity (not necessarily commercial)'), **description('de', 'soziale Struktur mit einem gemeinsamen Ziel')}
+```
+
+To add statements (claims), qualifiers and references, we need a `snak()` function. To create a snak, we have to specify `property`, `datavalue`, `datatype` and `snaktype`. For example, if our Wikibase instance has the property with ID `P1`, a label `Wikidata ID` and datatype `external-id`, we can create a mainsnak with that property and the value 'Q43229':
+```python
+mainsnak = snak(datatype='external-id', value='Q43229', prop='P1', snaktype='value')
+```
+
+Just as an example of creating the qualifiers and references, let's add:
+```python
+qualifiers = [snak(datatype='external-id', value='Q43229', prop='P1', snaktype='value')]
+references = [snak(datatype='external-id', value='Q43229', prop='P1', snaktype='value')]
+```
+
+We have now a mainsnak, qualifiers and references. Let's create a claim for an item:
+```python
+claims = claim(prop='P1', mainsnak=mainsnak, qualifiers=qualifiers, references=references)
+```
+
+All ingredients for creating the JSON representation of an item are ready. The `entity()` function does the job:
+```python
+item = entity(labels=labels, aliases=aliases, descriptions=descriptions, claims=claims, etype='item')
+```
+
+If the property needs to be created, the datatype has to be additionally specified:
+```python
+property = entity(labels=labels, aliases=aliases, descriptions=descriptions, claims=claims, etype='property', datatype='string')
+```
+
+Note that these functions create only the dictionaries for the corresponding elements of the Wikibase Data Model. Writing into the database happens using the `page` and `batch` functions.
+
+### Creating pages (entities and texts) in Wikibase
+
+To create one thousand items with the already created JSON representation of an item, use:
 ```python
 from RaiseWikibase.raiser import batch
-batch(content_model='wikibase-item', texts=[itemjson for i in range(1000)])
+batch(content_model='wikibase-item', texts=[item for i in range(1000)])
 ```
 
 Let `wtext` is a Python string representing a wikitext. Then, `wikitexts = [wtext for i in range(1000)]` is a list of wikitexts and `page_titles` is a list of the corresponding page titles. To create one thousand wikitexts in the main namespace, use:
@@ -80,7 +126,7 @@ The script `performance.py` runs two performance experiments for creating the wi
 python3 performance.py
 ```
 
-The variable `batch_lengths` is set to `[100]`. This means the length of a batch in each experiment is `100`. Running both experiments in this case takes 80 seconds. To reproduce Figures 1a and 1b, set `batch_lengths` to `[10000]`.
+The variable `batch_lengths` is set to `[100]`. This means the length of a batch in each experiment is `100`. Running both experiments in this case takes 80 seconds. You can set it to `[100, 200, 300]` in order to run experiments for different batch lengths. To reproduce Figures 1a and 1b, set `batch_lengths` to `[10000]`.
 
 The script saves the CSV files with numeric values of results and creates the pdf files with figures in `./experiments/`.
 
@@ -103,7 +149,7 @@ python3 miniWikibase.py
 
 Figure 2a shows the main page and Figure 2b shows a list of properties. If you run the script `miniWikibase.py` with the commented line 156, you will see only the property identifiers instead of the labels. You can either uncomment line 156 or run in shell `docker-compose down` and `docker-compose up -d`.
 
-## A reusable example of the BERD knowledge graph construction
+## Creating the BERD instance with millions of entities in a few hours
 
 The script `RaisingBERD.py` creates a knowledge graph from scratch. Before running it prepare the OpenCorporates dataset.
 Download https://daten.offeneregister.de/openregister.db.gz. Unzip it and run in shell:
