@@ -15,7 +15,16 @@
 
 ## How to use
 
-Clone or download the RaiseWikibase directory.
+Clone the RaiseWikibase repository: 
+```shell
+git clone https://github.com/UB-Mannheim/RaiseWikibase
+```
+
+Install RaiseWikibase via `pip3`:
+```shell
+cd RaiseWikibase/
+pip3 install -e .
+```
 
 ### Wikibase Docker
 
@@ -83,7 +92,7 @@ The insert rate in pages per second is shown at Figure 1a for wikitexts and at F
 
 ## Creating a mini Wikibase instance in a few minutes
 
-The script `miniWikibase.py` fills a fresh Wikibase instance with some structured and unstructured data in roughly 30 seconds. The data include 8400+ properties from Wikidata, two templates, a page with SPARQL examples, a page with a sidebar and modules. Check the folder `texts` containing unstructured data and add there you own data. Information about the Wikidata properties is queried through the Wikidata endpoint and it takes a few seconds. Run:
+The script `miniWikibase.py` fills a fresh Wikibase instance with some structured and unstructured data in roughly 30 seconds. The data include 8400+ properties from Wikidata, two templates, a page with SPARQL examples, a page with a sidebar and modules. Check the folder `texts` containing unstructured data and add there your own data. Information about the Wikidata properties is queried through the Wikidata endpoint and it takes a few seconds. Run:
 ```shell
 python3 miniWikibase.py
 ```
