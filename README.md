@@ -37,9 +37,9 @@ The versions of the RaiseWikibase-related libraries can be found in `setup.py`.
 
 ### Wikibase Docker
 
-RaiseWikibase is solely based on [Wikibase Docker](https://github.com/wmde/wikibase-docker) developed by [Wikimedia Germany](https://wikimedia.de). [Wikibase Docker](https://github.com/wmde/wikibase-docker) significantly simplifies deployment of a Wikibase instance. The versions of the Wikibase-related software can be found in `docker-compose.yml`: `wikibase:1.35-bundle`, `mariadb:10.3`, `wdqs:0.3.40` and `elasticsearch:6.5.4-extra`. The image `wdqs:0.3.40` is a Wikibase specific [Blazegraph](https://blazegraph.com) image.
+RaiseWikibase is solely based on [Wikibase Docker](https://github.com/wmde/wikibase-docker) developed by [Wikimedia Germany](https://wikimedia.de). [Wikibase Docker](https://github.com/wmde/wikibase-docker) significantly simplifies deployment of a [Wikibase](https://github.com/wikimedia/Wikibase) instance. The versions of the Wikibase-related software can be found in [docker-compose.yml](https://github.com/UB-Mannheim/RaiseWikibase/blob/main/docker-compose.yml): [wikibase:1.35-bundle](https://github.com/UB-Mannheim/RaiseWikibase/blob/main/docker-compose.yml#L16), [mariadb:10.3](https://github.com/UB-Mannheim/RaiseWikibase/blob/main/docker-compose.yml#L50), [wdqs:0.3.40](https://github.com/UB-Mannheim/RaiseWikibase/blob/main/docker-compose.yml#L84) and [elasticsearch:6.5.4-extra](https://github.com/UB-Mannheim/RaiseWikibase/blob/main/docker-compose.yml#L130). The image [wdqs:0.3.40](https://github.com/UB-Mannheim/RaiseWikibase/blob/main/docker-compose.yml#L84) is a Wikibase specific [Blazegraph](https://blazegraph.com) image.
 
-Copy `env.tmpl` to `.env` and substitute the default values with your
+Copy [env.tmpl](https://github.com/UB-Mannheim/RaiseWikibase/blob/main/env.tmpl) to `.env` and substitute the default values with your
 own usernames and passwords.
 
 Run in the main RaiseWikibase folder:
@@ -53,7 +53,7 @@ Check whether it's running using:
 docker ps
 ```
 
-If it's running, the output is like this:
+If it's running, the output looks like this:
 ```shell
 CONTAINER ID        IMAGE                                COMMAND                   CREATED              STATUS              PORTS                       NAMES
 0cac985f00a5        wikibase/quickstatements:latest      "/bin/bash /entrypoi…"    About a minute ago   Up About a minute   0.0.0.0:9191->80/tcp        raisewikibase_quickstatements_1
@@ -66,7 +66,7 @@ ef945d05fc88        wikibase/wikibase:1.35-bundle        "/bin/bash /entrypoi…
 b640eaa556e3        mariadb:10.3                         "docker-entrypoint.s…"    About a minute ago   Up About a minute   127.0.0.1:63306->3306/tcp   raisewikibase_mysql_1
 ```
 
-The logs can viewed via:
+The logs can be viewed via:
 ```shell
 docker-compose logs -f
 ```
@@ -85,15 +85,15 @@ docker-compose up -d
 The [Wikibase Data Model](https://www.mediawiki.org/wiki/Wikibase/DataModel) is an ontology describing the structure of the data in Wikibase. A non-technical summary of the Wikibase model is available at [DataModel/Primer](https://www.mediawiki.org/wiki/Wikibase/DataModel/Primer). The initial [conceptual specification](https://www.mediawiki.org/wiki/Wikibase/DataModel)
 for the Data Model was created by [Markus Krötzsch](http://korrekt.org/)
 and [Denny Vrandečić](http://simia.net/wiki/Denny), with minor contributions by
-Daniel Kinzler and Jeroen De Dauw. The Wikibase Data Model has been implemented by [Jeroen De Dauw](https://www.EntropyWins.wtf)
+Daniel Kinzler and [Jeroen De Dauw](https://www.EntropyWins.wtf). The Wikibase Data Model has been implemented by [Jeroen De Dauw](https://www.EntropyWins.wtf)
 and Thiemo Kreuz as [Wikimedia Germany](https://wikimedia.de) employees for the [Wikidata project](https://wikidata.org/).
 
-RaiseWikibase provides the functions for the Wikibase Data Model:
+RaiseWikibase provides the functions for the [Wikibase Data Model](https://www.mediawiki.org/wiki/Wikibase/DataModel):
 ```python
 from RaiseWikibase.datamodel import label, alias, description, snak, claim, entity
 ```
 
-The functions `entity()`, `claim()`, `snak()`, `description()`, `alias()`and `label()` return the template dictionaries. So all basic operations with dictionaries in Python can be used. You can merge two dictionaries `X` and `Y` using `X | Y` (since Python 3.9) and using `{**X, **Y}` (since Python 3.5).
+The functions `entity()`, `claim()`, `snak()`, `description()`, `alias()`and `label()` return the template dictionaries. So all basic operations with dictionaries in Python can be used. You can merge two dictionaries `X` and `Y` using `X | Y` (since Python 3.9), `{**X, **Y}` (since Python 3.5) and `X.update(Y)`.
 
 Let's check the Wikidata entity [Q43229](https://www.wikidata.org/wiki/Q43229) with an English label 'organization'. You can create both English and German labels for the entity using RaiseWikibase:
 ```python
@@ -132,13 +132,13 @@ All ingredients for creating the JSON representation of an item are ready. The `
 item = entity(labels=labels, aliases=aliases, descriptions=descriptions, claims=claims, etype='item')
 ```
 
-If the property needs to be created, the datatype has to be additionally specified:
+If a property is created, the corresponding datatype has to be additionally specified:
 ```python
 property = entity(labels=labels, aliases=aliases, descriptions=descriptions,
 		  claims=claims, etype='property', datatype='string')
 ```
 
-Note that these functions create only the dictionaries for the corresponding elements of the Wikibase Data Model. Writing into the database happens using the `page` and `batch` functions.
+Note that these functions create only the dictionaries for the corresponding elements in the Wikibase Data Model. Writing into the database is performed using the `page` and `batch` functions.
 
 ### Creating entities and texts
 
@@ -183,14 +183,14 @@ from wikidataintegrator import wdi_login
 login_instance = wdi_login.WDLogin(user=config.username, pwd=config.password)
 ```
 
-You can also create the JSON representations of entities in WikidataIntegrator or WikibaseIntegrator and then fill them into a Wikibase instance with RaiseWikibase. In WikibaseIntegrator a `wbi_core.ItemEngine` object needs to be created and then you can use the `get_json_representation()`  function:
+You can also create the JSON representations of entities in WikidataIntegrator or WikibaseIntegrator and then fill them into a Wikibase instance using RaiseWikibase. In WikibaseIntegrator you can create a `wbi_core.ItemEngine` object and use the `get_json_representation()`  function:
 ```python
 from wikibaseintegrator import wbi_core
 item = wbi_core.ItemEngine(item_id='Q1003030')
 ijson = item.get_json_representation()
 ```
 
-In WikidataIntegrator a `wbi_core.WDItemEngine` object needs to be created and then you can use the `get_wd_json_representation()`  function:
+In WikidataIntegrator a `wbi_core.WDItemEngine` object can be created and the `get_wd_json_representation()` function can be used:
 ```python
 from wikidataintegrator import wdi_core
 item = wdi_core.WDItemEngine(wd_item_id='Q1003030')
@@ -205,12 +205,12 @@ batch('wikibase-item', [ijson])
 
 ## Performance analysis
 
-The script `performance.py` runs two performance experiments for creating the wikitexts and items. Run:
+The script [performance.py](https://github.com/UB-Mannheim/RaiseWikibase/blob/main/performance.py) runs two performance experiments for creating the wikitexts and items. Run:
 ```shell
 python3 performance.py
 ```
 
-The variable `batch_lengths` is set by default to `[100]`. This means the length of a batch in each experiment is `100`. Running both experiments in this case takes 80 seconds. You can set it to `[100, 200, 300]` in order to run experiments for different batch lengths. In our experiments we used  `batch_lengths = [10000]`.
+The variable [batch_lengths](https://github.com/UB-Mannheim/RaiseWikibase/blob/main/performance.py#L39) is set by default to `[100]`. This means that the length of a batch in each experiment is `100`. Running both experiments in this case takes 80 seconds. You can set it to `[100, 200, 300]` in order to run multiple experiments with different batch lengths. In our experiments we used  `batch_lengths = [10000]`.
 
 The script saves the CSV files with numeric values of results and creates the pdf files with figures in `./experiments/`.
 
@@ -218,18 +218,18 @@ The script saves the CSV files with numeric values of results and creates the pd
 |:------:|:------:|
 | ![alt text](https://github.com/UB-Mannheim/RaiseWikibase/blob/main/experiments/exp1.png) | ![alt text](https://github.com/UB-Mannheim/RaiseWikibase/blob/main/experiments/exp2.png) |
 
-The insert rate in pages per second is shown at Figure 1a for wikitexts and at Figure 1b for items. Every data point correspond to a batch of ten thousands pages. At Figure 1a six different data points correspond to six repeated experiments. At Figure 1b two colors correspond to two repeated experiments and three shapes of a data point correspond to three cases: 1) circle - each claim without a qualifier and without a reference, 2) x - each claim with one qualifier and without a reference, and 3) square - each claim with one qualifier and one reference.
+The insert rates in pages per second are shown at Figure 1a for wikitexts and at Figure 1b for items. Every data point corresponds to a batch of ten thousands pages. At Figure 1a six different data points correspond to six repeated experiments. At Figure 1b two colors correspond to two repeated experiments and three shapes of a data point correspond to the three cases: 1) circle - each claim without a qualifier and without a reference, 2) x - each claim with one qualifier and without a reference, and 3) square - each claim with one qualifier and one reference.
 
 To 'reproduce' Figures 1a and 1b, set `batch_lengths` in `performance.py` to `[10000]`. Note that 'reproducibility' in this case does not mean that you will get the same values in the experiments as at Figures 1a and 1b. It means that you can get similar plots with the values specific for your hardware and software. Our analysis was performed using a workstation with 6-core Intel i5-8500T CPU @ 2.10GHz, 16GB RAM, SSD storage and running Debian 10.
 
 ## Creating a mini Wikibase instance with thousands of entities in a few minutes
 
-The script `miniWikibase.py` fills a fresh Wikibase instance with some structured and unstructured data in roughly 30 seconds. The data include 8400+ properties from Wikidata, two templates, a page with SPARQL examples, a page with a sidebar and modules. Check the folder `texts` containing unstructured data and add there your own data. Information about the Wikidata properties is queried through the Wikidata endpoint and it takes a few seconds. Run:
+The script [miniWikibase.py](https://github.com/UB-Mannheim/RaiseWikibase/blob/main/miniWikibase.py) fills a fresh Wikibase instance with some structured and unstructured data in roughly 30 seconds. The data include 8400+ properties from [Wikidata](https://www.wikidata.org), two templates, a page with SPARQL examples, a page with a sidebar and modules. Check the folder `texts` containing unstructured data and add there your own data. Information about the Wikidata properties is queried through the [Wikidata endpoint](https://query.wikidata.org) and it takes a few seconds. Run:
 ```shell
 python3 miniWikibase.py
 ```
 
-| (2a) Main page | (2b) Properties |
+| (2a) Main page | (2b) List of properties |
 |:------:|:------:|
 | ![alt text](https://github.com/UB-Mannheim/RaiseWikibase/blob/main/experiments/mini1.png) | ![alt text](https://github.com/UB-Mannheim/RaiseWikibase/blob/main/experiments/mini2.png) |
 
@@ -237,7 +237,7 @@ Figure 2a shows the main page and Figure 2b shows a list of properties. If you r
 
 ## Creating a mega Wikibase instance with millions of BERD entities in a few hours
 
-The script `megaWikibase.py` creates a knowledge graph with millions of BERD (Business, Economic and Related Data) entities from scratch. Before running it prepare the OpenCorporates dataset.
+The script [megaWikibase.py](https://github.com/UB-Mannheim/RaiseWikibase/blob/main/megaWikibase.py) creates a knowledge graph with millions of BERD (Business, Economic and Related Data) entities from scratch. Before running it prepare the OpenCorporates dataset.
 Download https://daten.offeneregister.de/openregister.db.gz. Unzip it and run in shell:
 ```shell
 sqlite3 -header -csv handelsregister.db "select * from company;" > millions_companies.csv
