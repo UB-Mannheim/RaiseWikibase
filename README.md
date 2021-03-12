@@ -3,21 +3,24 @@
 * Fast inserts into a Wikibase instance.
 * Creates up to a million entities and wikitexts per hour.
 * Creates a mini Wikibase instance with Wikidata properties in a few minutes.
-* Creates the BERD knowledge graph with millions of entities in a few hours.
+* Creates the [BERD](https://www.berd-bw.de) knowledge graph with millions of entities in a few hours.
 
 ## Table of contents
 - [How to use](#how-to-use)
+  * [Installation](#installation)
   * [Wikibase Docker](#wikibase-docker)
   * [Wikibase Data Model and RaiseWikibase functions](#wikibase-data-model-and-raisewikibase-functions)
   * [Creating entities and texts](#creating-entities-and-texts)
   * [Compatibility with WikidataIntegrator and WikibaseIntegrator](#compatibility-with-wikidataintegrator-and-wikibaseintegrator)
 - [Performance analysis](#performance-analysis)
-- [Creating a mini Wikibase instance with thousands entities in a few minutes](#creating-a-mini-wikibase-instance-with-thousands-entities-in-a-few-minutes)
+- [Creating a mini Wikibase instance with thousands of entities in a few minutes](#creating-a-mini-wikibase-instance-with-thousands-of-entities-in-a-few-minutes)
 - [Creating a mega Wikibase instance with millions of BERD entities in a few hours](#creating-a-mega-wikibase-instance-with-millions-of-berd-entities-in-a-few-hours)
 - [Deployment in production](#deployment-in-production)
 - [Acknowledgments](#acknowledgments)
 
 ## How to use
+
+### Installation
 
 Clone the RaiseWikibase repository: 
 ```shell
@@ -92,7 +95,7 @@ from RaiseWikibase.datamodel import label, alias, description, snak, claim, enti
 
 The functions `entity()`, `claim()`, `snak()`, `description()`, `alias()`and `label()` return the template dictionaries. So all basic operations with dictionaries in Python can be used. You can merge two dictionaries `X` and `Y` using `X | Y` (since Python 3.9) and using `{**X, **Y}` (since Python 3.5).
 
-Let's check the Wikidata entity [Q43229](https://www.wikidata.org/wiki/Q43229). You can create both English and German labels for the entity using RaiseWikibase:
+Let's check the Wikidata entity [Q43229](https://www.wikidata.org/wiki/Q43229) with an English label 'organization'. You can create both English and German labels for the entity using RaiseWikibase:
 ```python
 labels = {**label('en', 'organization'), **label('de', 'Organisation')}
 ```
@@ -145,7 +148,7 @@ from RaiseWikibase.raiser import batch
 batch(content_model='wikibase-item', texts=[item for i in range(1000)])
 ```
 
-Let `wtext` is a Python string representing a wikitext. Then, `wikitexts = [wtext for i in range(1000)]` is a list of wikitexts and `page_titles` is a list of the corresponding page titles. To create one thousand wikitexts in the main namespace, use:
+Let `wtext` is a Python string representing a wikitext. Then, `wikitexts = [wtext for i in range(1000)]` is a list of wikitexts and `page_titles = ['wikitext' + str(i) for i in range(1000)]` is a list of the corresponding page titles. To create one thousand wikitexts in the main namespace, use:
 
 ```python
 batch(content_model='wikitext', texts=wikitexts, namespace=0, page_title=page_titles)
@@ -202,12 +205,12 @@ batch('wikibase-item', [ijson])
 
 ## Performance analysis
 
-The script `performance.py` runs two performance experiments for creating the wikitexts and items. Run it in shell:
+The script `performance.py` runs two performance experiments for creating the wikitexts and items. Run:
 ```shell
 python3 performance.py
 ```
 
-The variable `batch_lengths` is set to `[100]`. This means the length of a batch in each experiment is `100`. Running both experiments in this case takes 80 seconds. You can set it to `[100, 200, 300]` in order to run experiments for different batch lengths. To reproduce Figures 1a and 1b, set `batch_lengths` to `[10000]`.
+The variable `batch_lengths` is set by default to `[100]`. This means the length of a batch in each experiment is `100`. Running both experiments in this case takes 80 seconds. You can set it to `[100, 200, 300]` in order to run experiments for different batch lengths. In our experiments we used  `batch_lengths = [10000]`.
 
 The script saves the CSV files with numeric values of results and creates the pdf files with figures in `./experiments/`.
 
@@ -217,7 +220,9 @@ The script saves the CSV files with numeric values of results and creates the pd
 
 The insert rate in pages per second is shown at Figure 1a for wikitexts and at Figure 1b for items. Every data point correspond to a batch of ten thousands pages. At Figure 1a six different data points correspond to six repeated experiments. At Figure 1b two colors correspond to two repeated experiments and three shapes of a data point correspond to three cases: 1) circle - each claim without a qualifier and without a reference, 2) x - each claim with one qualifier and without a reference, and 3) square - each claim with one qualifier and one reference.
 
-## Creating a mini Wikibase instance with thousands entities in a few minutes
+To 'reproduce' Figures 1a and 1b, set `batch_lengths` in `performance.py` to `[10000]`. Note that 'reproducibility' in this case does not mean that you will get the same values in the experiments as at Figures 1a and 1b. It means that you can get similar plots with the values specific for your hardware and software. Our analysis was performed using a workstation with 6-core Intel i5-8500T CPU @ 2.10GHz, 16GB RAM, SSD storage and running Debian 10.
+
+## Creating a mini Wikibase instance with thousands of entities in a few minutes
 
 The script `miniWikibase.py` fills a fresh Wikibase instance with some structured and unstructured data in roughly 30 seconds. The data include 8400+ properties from Wikidata, two templates, a page with SPARQL examples, a page with a sidebar and modules. Check the folder `texts` containing unstructured data and add there your own data. Information about the Wikidata properties is queried through the Wikidata endpoint and it takes a few seconds. Run:
 ```shell
@@ -252,6 +257,6 @@ A [setup](https://stackoverflow.com/a/63397827) for deployment using Nginx is pr
 
 ## Acknowledgments
 
-This work was funded by the Ministry of Science, Research and Arts of Baden-Württemberg through the project [Business and Economics Research Data Center Baden-Württemberg](https://www.berd-bw.de).
+This work was funded by the Ministry of Science, Research and Arts of Baden-Württemberg through the project [Business and Economics Research Data Center Baden-Württemberg (BERD@BW)](https://www.berd-bw.de).
 
 We thank [Jesper Zedlitz](https://github.com/jze) for his experiments explained at [the FactGrid blog](https://blog.factgrid.de/archives/2013) and for his open source code [wikibase-insert](https://github.com/jze/wikibase-insert).
