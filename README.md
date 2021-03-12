@@ -160,7 +160,7 @@ The ID for the main namespace `namespaces['main']` is `0`.
 
 ### Compatibility with WikidataIntegrator and WikibaseIntegrator
 
-[WikidataIntegrator](https://github.com/SuLab/WikidataIntegrator) and [WikibaseIntegrator](https://github.com/LeMyst/WikibaseIntegrator) are the wrappers of the Wikibase API (https://www.mediawiki.org/wiki/Wikibase/API). A bot account is needed to start data filling with them. RaiseWikibase can create a bot account for a local Wikibase instance, save the login and password to a configuration file and read them back to a `config` dictionary:
+[WikidataIntegrator](https://github.com/SuLab/WikidataIntegrator) and [WikibaseIntegrator](https://github.com/LeMyst/WikibaseIntegrator) are the wrappers of the [Wikibase API](https://www.mediawiki.org/wiki/Wikibase/API). A bot account is needed to start data filling with them. RaiseWikibase can create a bot account for a local Wikibase instance, save the login and password to a configuration file and read them back to a `config` dictionary:
 
 ```python
 from RaiseWikibase.raiser import create_bot
@@ -169,7 +169,7 @@ create_bot()
 config = Settings()
 ```
 
-The `config` dictionary can be used in WikibaseIntegrator:
+The `config` dictionary can be used in WikibaseIntegrator for creating a login instance:
 ```python
 from wikibaseintegrator import wbi_login
 login_instance = wbi_login.Login(user=config.username, pwd=config.password)
