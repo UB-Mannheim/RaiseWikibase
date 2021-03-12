@@ -23,7 +23,7 @@ setup(
     "requests>=2.21.0",
     "seaborn>=0.11.1",
     ],
-    scripts=['miniWikibase.py','RaisingBERD.py','performance.py'],
+    scripts=['miniWikibase.py','megaWikibase.py','performance.py'],
     packages=find_packages(),
     classifiers=[
 	"License :: OSI Approved :: MIT License",

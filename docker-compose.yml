@@ -40,7 +40,7 @@ services:
       - MW_ADMIN_NAME=${WB_ADMIN_USER}
       - MW_ADMIN_PASS=${WB_ADMIN_PASS}
       - MW_ADMIN_EMAIL=${WB_ADMIN_MAIL}
-      - MW_SITE_NAME=BERD@BW
+      - MW_SITE_NAME=BERD
       - MW_WG_SECRET_KEY=${WB_WG_SECRET_KEY}
       - DB_USER=berdbw
       - DB_PASS=${WB_DB_PASS}
