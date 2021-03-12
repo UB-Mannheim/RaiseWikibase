@@ -7,6 +7,10 @@
 
 ## Table of contents
 - [How to use](#how-to-use)
+  * [Wikibase Docker](#wikibase-docker)
+  * [Wikibase Data Model and RaiseWikibase functions](#wikibase-data-model-and-raisewikibase-functions)
+  * [Creating entities and texts](#creating-entities-and-texts)
+  * [Compatibility with WikidataIntegrator and WikibaseIntegrator](#compatibility-with-wikidataintegrator-and-wikibaseintegrator)
 - [Performance analysis](#performance-analysis)
 - [Creating a mini Wikibase instance in a few minutes](#creating-a-mini-wikibase-instance-in-a-few-minutes)
 - [Creating the BERD instance with millions of entities in a few hours](#creating-the-berd-instance-with-millions-of-entities-in-a-few-hours)
@@ -26,11 +30,11 @@ cd RaiseWikibase/
 pip3 install -e .
 ```
 
-The versions of the RaiseWikibase related libraries can be found in `setup.py`.
+The versions of the RaiseWikibase-related libraries can be found in `setup.py`.
 
 ### Wikibase Docker
 
-RaiseWikibase is solely based on [Wikibase Docker](https://github.com/wmde/wikibase-docker) developed by [Wikimedia Germany](https://wikimedia.de). [Wikibase Docker](https://github.com/wmde/wikibase-docker) significantly simplifies deployment of a Wikibase instance. The versions of the Wikibase related software can be found in `docker-compose.yml`: `wikibase:1.35-bundle`, `mariadb:10.3`, `wdqs:0.3.40` and `elasticsearch:6.5.4-extra`. The image `wdqs:0.3.40` is a Wikibase specific [Blazegraph](https://blazegraph.com) image.
+RaiseWikibase is solely based on [Wikibase Docker](https://github.com/wmde/wikibase-docker) developed by [Wikimedia Germany](https://wikimedia.de). [Wikibase Docker](https://github.com/wmde/wikibase-docker) significantly simplifies deployment of a Wikibase instance. The versions of the Wikibase-related software can be found in `docker-compose.yml`: `wikibase:1.35-bundle`, `mariadb:10.3`, `wdqs:0.3.40` and `elasticsearch:6.5.4-extra`. The image `wdqs:0.3.40` is a Wikibase specific [Blazegraph](https://blazegraph.com) image.
 
 Copy `env.tmpl` to `.env` and substitute the default values with your
 own usernames and passwords.
@@ -73,7 +77,7 @@ sudo rm -rf mediawiki-*  query-service-data/ quickstatements-data/
 docker-compose up -d
 ```
 
-### Wikibase Data Model and RaiseWikibase functions for it
+### Wikibase Data Model and RaiseWikibase functions
 
 The [Wikibase Data Model](https://www.mediawiki.org/wiki/Wikibase/DataModel) is an ontology describing the structure of the data in Wikibase. A non-technical summary of the Wikibase model is available at [DataModel/Primer](https://www.mediawiki.org/wiki/Wikibase/DataModel/Primer). The initial [conceptual specification](https://www.mediawiki.org/wiki/Wikibase/DataModel)
 for the Data Model was created by [Markus Krötzsch](http://korrekt.org/)
@@ -133,7 +137,7 @@ property = entity(labels=labels, aliases=aliases, descriptions=descriptions,
 
 Note that these functions create only the dictionaries for the corresponding elements of the Wikibase Data Model. Writing into the database happens using the `page` and `batch` functions.
 
-### Creating pages (entities and texts) in Wikibase
+### Creating entities and texts
 
 To create one thousand items with the already created JSON representation of an item, use:
 ```python
@@ -153,6 +157,48 @@ from RaiseWikibase.datamodel import namespaces
 ```
 
 The ID for the main namespace `namespaces['main']` is `0`.
+
+### Compatibility with WikidataIntegrator and WikibaseIntegrator
+
+[WikidataIntegrator](https://github.com/SuLab/WikidataIntegrator) and [WikibaseIntegrator](https://github.com/LeMyst/WikibaseIntegrator) are the wrappers of the Wikibase API (https://www.mediawiki.org/wiki/Wikibase/API). A bot account is needed to start data filling with them. RaiseWikibase can create a bot account for a local Wikibase instance, save the login and password to a configuration file and read them back to a `config` dictionary:
+
+```python
+from RaiseWikibase.raiser import create_bot
+from RaiseWikibase.settings import Settings
+create_bot()
+config = Settings()
+```
+
+The `config` dictionary can be used in WikibaseIntegrator:
+```python
+from wikibaseintegrator import wbi_login
+login_instance = wbi_login.Login(user=config.username, pwd=config.password)
+```
+and in WikidataIntegrator:
+```python
+from wikidataintegrator import wdi_login
+login_instance = wdi_login.WDLogin(user=config.username, pwd=config.password)
+```
+
+You can also create the JSON representations of entities in WikidataIntegrator or WikibaseIntegrator and then fill them into a Wikibase instance with RaiseWikibase. In WikibaseIntegrator a `wbi_core.ItemEngine` object needs to be created and then you can use the `get_json_representation()`  function:
+```python
+from wikibaseintegrator import wbi_core
+item = wbi_core.ItemEngine(item_id='Q1003030')
+ijson = item.get_json_representation()
+```
+
+In WikidataIntegrator a `wbi_core.WDItemEngine` object needs to be created and then you can use the `get_wd_json_representation()`  function:
+```python
+from wikidataintegrator import wdi_core
+item = wdi_core.WDItemEngine(wd_item_id='Q1003030')
+ijson = item.get_wd_json_representation()
+```
+
+The JSON representation of an entity can be uploaded into a Wikibase instance using the `batch` function in RaiseWikibase:
+```python
+from RaiseWikibase.raiser import batch
+batch('wikibase-item', [ijson])
+```
 
 ## Performance analysis
 
