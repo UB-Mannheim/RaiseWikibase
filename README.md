@@ -99,13 +99,13 @@ labels = {**label('en', 'organization'), **label('de', 'Organisation')}
 
 Multiple English and German aliases can also be easily created:
 ```python
-aliases = {**alias('en', ['organisation', 'org']), **alias('de', ['Org', 'Orga'])}
+aliases = alias('en', ['organisation', 'org']) | alias('de', ['Org', 'Orga'])
 ```
 
 Multilingual descriptions can be added:
 ```python
-descriptions = {**description('en', 'social entity (not necessarily commercial)'),
-		**description('de', 'soziale Struktur mit einem gemeinsamen Ziel')}
+descriptions = description('en', 'social entity (not necessarily commercial)')
+descriptions.update(description('de', 'soziale Struktur mit einem gemeinsamen Ziel'))
 ```
 
 To add statements (claims), qualifiers and references, we need a `snak()` function. To create a snak, we have to specify `property`, `datavalue`, `datatype` and `snaktype`. For example, if our Wikibase instance has the property with ID `P1`, a label `Wikidata ID` and datatype `external-id`, we can create a mainsnak with that property and the value 'Q43229':
