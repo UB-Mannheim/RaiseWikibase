@@ -12,6 +12,7 @@
   * [Wikibase Data Model and RaiseWikibase functions](#wikibase-data-model-and-raisewikibase-functions)
   * [Creating entities and texts](#creating-entities-and-texts)
   * [Compatibility with WikidataIntegrator and WikibaseIntegrator](#compatibility-with-wikidataintegrator-and-wikibaseintegrator)
+  * [Getting data from Wikidata and filling it into a Wikibase instance](#getting-data-from-wikidata-and-filling-it-into-a-wikibase-instance)
 - [Performance analysis](#performance-analysis)
 - [Creating a mini Wikibase instance with thousands of entities in a few minutes](#creating-a-mini-wikibase-instance-with-thousands-of-entities-in-a-few-minutes)
 - [Creating a mega Wikibase instance with millions of BERD entities in a few hours](#creating-a-mega-wikibase-instance-with-millions-of-berd-entities-in-a-few-hours)
@@ -161,8 +162,9 @@ from RaiseWikibase.datamodel import namespaces
 
 The ID for the main namespace `namespaces['main']` is `0`.
 
-Alternatively, the `page` function can be used directly. First, a connection object is created. A page function executes the necessary inserts. The changes are commited and the connection is closed:
+Alternatively, the `page` function can be used directly. First, a connection object is created. The page function executes the necessary inserts, the changes are commited and the connection is closed:
 ```python
+from RaiseWikibase.dbconnection import DBConnection
 from RaiseWikibase.raiser import page
 connection = DBConnection()
 page(connection=connection, content_model=content_model,
@@ -214,6 +216,46 @@ The JSON representation of an entity can be uploaded into a Wikibase instance us
 from RaiseWikibase.raiser import batch
 batch('wikibase-item', [ijson])
 ```
+
+### Getting data from Wikidata and filling it into a Wikibase instance
+
+The [Wikidata](https://wikidata.org/) knowledge graph already has millions of items and thousands of properties. For many projects some of these entities can be reused as a starting point. Let's create the multilingual items [human](https://wikidata.org/entity/Q5), [organization](https://wikidata.org/entity/Q43229) and [location](https://wikidata.org/entity/Q17334923) in a local Wikibase instance using RaiseWikibase.
+
+The example below defines the function `get_wd_entity()`. It takes a Wikidata ID as an input, sends a request to Wikidata, gets the JSON representation of an entity, removes the keys unwanted in a local Wikibase instance, creates a claim and returns the JSON representation of the entity, if an error has not occured.
+
+```python
+from RaiseWikibase.raiser import batch
+from RaiseWikibase.datamodel import claim, snak
+import requests
+
+def get_wd_entity(wid=''):
+    """Returns JSON representation of a Wikidata entity for the given WID"""
+    # Remove the following keys to avoid a problem with a new Wikibase instance
+    remove_keys = ['lastrevid', 'pageid', 'modified', 'title', 'ns']
+    try:
+        r = requests.get('https://www.wikidata.org/entity/' + wid + '.json')
+        entity = r.json().get('entities').get(wid)
+        for key in remove_keys:
+            entity.pop(key)
+        entity['claims'] = claim(prop='P1',
+                       mainsnak=snak(datatype='external-id',
+                                     value=wid,
+                                     prop='P1',
+                                     snaktype='value'),
+                       qualifiers=[],
+                       references=[])
+    except Exception:
+        entity = None
+    return entity
+
+wids = ['Q5', 'Q43229', 'Q17334923'] # human, organization, location
+items = [get_wd_entity(wid) for wid in wids]
+batch('wikibase-item', items)
+```
+
+In this example we used the property with ID 'P1'. That property with a label 'Wikidata ID' can be created using the script [miniWikibase.py](https://github.com/UB-Mannheim/RaiseWikibase/blob/main/miniWikibase.py).
+
+The line, where "entity['claims']" is rewritten, can be commented. In this case the created items would contain the claims with the properties IDs corresponding to Wikidata. Just try it out.
 
 ## Performance analysis
 
