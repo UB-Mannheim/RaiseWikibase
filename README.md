@@ -221,7 +221,7 @@ batch('wikibase-item', [ijson])
 
 The [Wikidata](https://wikidata.org/) knowledge graph already has millions of items and thousands of properties. For many projects some of these entities can be reused as a starting point. Let's create the multilingual items [human](https://wikidata.org/entity/Q5), [organization](https://wikidata.org/entity/Q43229) and [location](https://wikidata.org/entity/Q17334923) in a local Wikibase instance using RaiseWikibase.
 
-The example below defines the function `get_wd_entity()`. It takes a Wikidata ID as an input, sends a request to Wikidata, gets the JSON representation of an entity, removes the keys unwanted in a local Wikibase instance, creates a claim and returns the JSON representation of the entity, if an error has not occured.
+The example below defines the function `get_wd_entity()`. It takes a Wikidata ID as an input, sends a request to Wikidata, gets the JSON representation of an entity, removes the keys unwanted in a local Wikibase instance, creates a claim and returns the JSON representation of the entity, if an error has not occured. The function `get_wd_entity()` is used to get the JSON representations for [human](https://wikidata.org/entity/Q5), [organization](https://wikidata.org/entity/Q43229) and [location](https://wikidata.org/entity/Q17334923). These JSON representations are then filled into a local Wikibase instance using the `batch` function.
 
 ```python
 from RaiseWikibase.raiser import batch
@@ -238,12 +238,12 @@ def get_wd_entity(wid=''):
         for key in remove_keys:
             entity.pop(key)
         entity['claims'] = claim(prop='P1',
-                       mainsnak=snak(datatype='external-id',
-                                     value=wid,
-                                     prop='P1',
-                                     snaktype='value'),
-                       qualifiers=[],
-                       references=[])
+                                 mainsnak=snak(datatype='external-id',
+                                               value=wid,
+                                               prop='P1',
+                                               snaktype='value'),
+                                 qualifiers=[],
+                                 references=[])
     except Exception:
         entity = None
     return entity
@@ -253,9 +253,9 @@ items = [get_wd_entity(wid) for wid in wids]
 batch('wikibase-item', items)
 ```
 
-In this example we used the property with ID 'P1'. That property with a label 'Wikidata ID' can be created using the script [miniWikibase.py](https://github.com/UB-Mannheim/RaiseWikibase/blob/main/miniWikibase.py).
+The line, where `entity['claims']` is rewritten, can be commented. Then, the created items contain the claims with the property IDs corresponding to Wikidata. Just try it out.
 
-The line, where "entity['claims']" is rewritten, can be commented. In this case the created items would contain the claims with the properties IDs corresponding to Wikidata. Just try it out.
+We used the property with ID 'P1' in the claim. That property with a label 'Wikidata ID' can be created using the script [miniWikibase.py](https://github.com/UB-Mannheim/RaiseWikibase/blob/main/miniWikibase.py). It creates all 8400+ Wikidata properties in less than a minute.
 
 ## Performance analysis
 
