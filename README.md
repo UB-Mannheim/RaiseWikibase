@@ -161,6 +161,18 @@ from RaiseWikibase.datamodel import namespaces
 
 The ID for the main namespace `namespaces['main']` is `0`.
 
+Alternatively, the `page` function can be used directly. First, a connection object is created. A page function executes the necessary inserts. The changes are commited and the connection is closed:
+```python
+from RaiseWikibase.raiser import page
+connection = DBConnection()
+page(connection=connection, content_model=content_model,
+     namespace=namespace, text=text, page_title=page_title, new=new)
+connection.conn.commit()
+connection.conn.close()
+```
+
+The argument `new` specifies whether the page is created (`new=True`) or edited (`new=False`). The `new` argument can be used in the `batch` function as well.
+
 ### Compatibility with WikidataIntegrator and WikibaseIntegrator
 
 [WikidataIntegrator](https://github.com/SuLab/WikidataIntegrator) and [WikibaseIntegrator](https://github.com/LeMyst/WikibaseIntegrator) are the wrappers of the [Wikibase API](https://www.mediawiki.org/wiki/Wikibase/API). A bot account is needed to start data filling with them. RaiseWikibase can create a bot account for a local Wikibase instance, save the login and password to a configuration file and read them back to a `config` dictionary:
@@ -190,7 +202,7 @@ item = wbi_core.ItemEngine(item_id='Q1003030')
 ijson = item.get_json_representation()
 ```
 
-In WikidataIntegrator a `wbi_core.WDItemEngine` object can be created and the `get_wd_json_representation()` function can be used:
+In WikidataIntegrator a `wdi_core.WDItemEngine` object can be created and the `get_wd_json_representation()` function can be used:
 ```python
 from wikidataintegrator import wdi_core
 item = wdi_core.WDItemEngine(wd_item_id='Q1003030')
