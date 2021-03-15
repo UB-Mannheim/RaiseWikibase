@@ -179,7 +179,7 @@ class TimelessTemplate extends BaseTemplate {
 		}
 		// END hack
 
-		$labelId = Sanitizer::escapeId( "p-$name-label" );
+		$labelId = Sanitizer::escapeIdForAttribute( "p-$name-label" );
 
 		if ( is_array( $content ) ) {
 			$contentText = Html::openElement( 'ul' );
@@ -202,7 +202,7 @@ class TimelessTemplate extends BaseTemplate {
 		$html = Html::rawElement( 'div', [
 				'role' => 'navigation',
 				'class' => [ 'mw-portlet', 'emptyPortlet' => !$content ],
-				'id' => Sanitizer::escapeId( 'p-' . $name ),
+				'id' => Sanitizer::escapeIdForAttribute( 'p-' . $name ),
 				'title' => Linker::titleAttrib( 'p-' . $name ),
 				'aria-labelledby' => $labelId
 			],
@@ -236,7 +236,7 @@ class TimelessTemplate extends BaseTemplate {
 
 		$html .= Html::rawElement(
 			'div',
-			[ 'id' => Sanitizer::escapeId( $id ), 'class' => 'sidebar-chunk' ],
+			[ 'id' => Sanitizer::escapeIdForAttribute( $id ), 'class' => 'sidebar-chunk' ],
 			Html::rawElement( 'h2', [],
 				Html::element( 'span', [],
 					$this->getMsg( $headerMessage )->text()
@@ -264,7 +264,7 @@ class TimelessTemplate extends BaseTemplate {
 		$html .= Html::openElement(
 			'div',
 			[
-				'id' => Sanitizer::escapeId( $id ),
+				'id' => Sanitizer::escapeIdForAttribute( $id ),
 				'class' => 'mw-portlet',
 				'role' => 'banner'
 			]
