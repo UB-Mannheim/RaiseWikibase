@@ -170,10 +170,14 @@ ${DOLLAR}wgJobRunRate = 1.0;
 # Don't set this lower than $wgMaxArticleSize*1024. 
 # ${DOLLAR}wgAPIMaxResultSize = 125829120;
 
+${DOLLAR}wgMemoryLimit = "500M";
+${DOLLAR}wgScribuntoEngineConf['luastandalone']['memoryLimit'] = 209715200;
+${DOLLAR}wgMaxShellMemory = 204800;
+
 # Set German timezone
-#${DOLLAR}wgLocaltimezone="Europe/Berlin";
-#${DOLLAR}wgLocalTZoffset = date("Z") / 60;
-#date_default_timezone_set( ${DOLLAR}wgLocaltimezone );
+${DOLLAR}wgLocaltimezone="Europe/Berlin";
+${DOLLAR}wgLocalTZoffset = date("Z") / 60;
+date_default_timezone_set( ${DOLLAR}wgLocaltimezone );
 # ${DOLLAR}wgObjectCacheSessionExpiry = 3600*3;
 
 # For debugging
