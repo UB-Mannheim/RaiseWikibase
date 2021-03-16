@@ -138,7 +138,12 @@ def building_indexing():
     connection = DBConnection()
     container = connection.docker_wikibase
     connection.conn.close()
-    
+
+    # Run update.php
+    execute_shell(
+        'docker exec ' + 
+        container + 
+        ' bash "-c" "php maintenance/update.php --force --quick"')
     # Build the secondary tables for items and properties
     execute_shell(
         'docker exec ' + 
