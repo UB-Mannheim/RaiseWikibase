@@ -9,13 +9,6 @@ import numpy as np
 import csv
 
 
-def restrict(d, languages=['en', 'de']):
-    """Restrict a dictionary with the labels or aliases to the specified 
-    languages only"""
-    # lang = ['en', 'de', 'zh', 'hi', 'es', 'fr', 'ar', 'bn', 'ru', 'pt', 'id']
-    return dict((k, v) for (k, v) in d.items() if k in languages)
-
-
 def property_wid(prop=''):
     """Create a simplified JSON represetation (only the label, aliases, 
     description and one claim) of the first local property 'Wikidata ID'"""
@@ -44,9 +37,9 @@ def property_wd(prop=''):
     if prop:
         r = requests.get('https://www.wikidata.org/entity/' + prop + '.json').json()
         po = r.get('entities').get(prop)
-        p = entity(labels=restrict(po.get('labels')),
-                   aliases=restrict(po.get('aliases')),
-                   descriptions=restrict(po.get('descriptions')),
+        p = entity(labels=po.get('labels'),
+                   aliases=po.get('aliases'),
+                   descriptions=po.get('descriptions'),
                    claims=claim(prop='P1',
                                 mainsnak=snak(datatype='external-id',
                                               value=prop,
