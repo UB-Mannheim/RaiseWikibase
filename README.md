@@ -1,5 +1,8 @@
 # RaiseWikibase
 
+```
+A tool for speeding up multilingual knowledge graph construction with Wikibase.
+```
 * Fast inserts into a Wikibase instance.
 * Creates up to a million entities and wikitexts per hour.
 * Creates a mini Wikibase instance with Wikidata properties in a few minutes.
@@ -34,7 +37,7 @@ cd RaiseWikibase/
 pip3 install -e .
 ```
 
-The versions of the RaiseWikibase-related libraries can be found in `setup.py`.
+The versions of the RaiseWikibase-related libraries can be found in [setup.py](https://github.com/UB-Mannheim/RaiseWikibase/blob/main/setup.py).
 
 ### Wikibase Docker
 
@@ -81,6 +84,10 @@ sudo rm -rf mediawiki-*  query-service-data/ quickstatements-data/
 docker-compose up -d
 ```
 
+Additionally, you can install [extensions](https://www.mediawiki.org/wiki/Manual:Extensions) for a Wikibase instance. Let's add extension [TemplateStyles](https://www.mediawiki.org/wiki/Extension:TemplateStyles). [Download](https://www.mediawiki.org/wiki/Special:ExtensionDistributor/TemplateStyles) and extract it to the folder `RaiseWikibase/extensions/`. Uncomment the [line 27](https://github.com/UB-Mannheim/RaiseWikibase/blob/main/docker-compose.yml#L27) in [docker-compose.yml](https://github.com/UB-Mannheim/RaiseWikibase/blob/main/docker-compose.yml) and the [lines 138-142](https://github.com/UB-Mannheim/RaiseWikibase/blob/main/berd/LocalSettings.php.template#L138-L142) in [LocalSettings.php.template](https://github.com/UB-Mannheim/RaiseWikibase/blob/main/berd/LocalSettings.php.template). Other extensions can be installed in a similar way.
+
+See also [Wikibase/Docker](https://www.mediawiki.org/wiki/Wikibase/Docker) and [Extending Wikibase](https://wikiba.se/extend).
+
 ### Wikibase Data Model and RaiseWikibase functions
 
 The [Wikibase Data Model](https://www.mediawiki.org/wiki/Wikibase/DataModel) is an ontology describing the structure of the data in Wikibase. A non-technical summary of the Wikibase model is available at [DataModel/Primer](https://www.mediawiki.org/wiki/Wikibase/DataModel/Primer). The initial [conceptual specification](https://www.mediawiki.org/wiki/Wikibase/DataModel)
@@ -94,9 +101,9 @@ RaiseWikibase provides the functions for the [Wikibase Data Model](https://www.m
 from RaiseWikibase.datamodel import label, alias, description, snak, claim, entity
 ```
 
-The functions `entity()`, `claim()`, `snak()`, `description()`, `alias()`and `label()` return the template dictionaries. So all basic operations with dictionaries in Python can be used. You can merge two dictionaries `X` and `Y` using `X | Y` (since Python 3.9), `{**X, **Y}` (since Python 3.5) and `X.update(Y)`.
+The functions `entity`, `claim`, `snak`, `description`, `alias`and `label` return the template dictionaries. So all basic operations with dictionaries in Python can be used. You can merge two dictionaries `X` and `Y` using `X | Y` (since Python 3.9), `{**X, **Y}` (since Python 3.5) and `X.update(Y)`.
 
-Let's check the Wikidata entity [Q43229](https://www.wikidata.org/wiki/Q43229) with an English label 'organization'. You can create both English and German labels for the entity using RaiseWikibase:
+Let's check the Wikidata entity [Q43229](https://www.wikidata.org/wiki/Q43229) with an English label 'organization'. You can create both English and German labels for the entity in a local Wikibase instance using RaiseWikibase:
 ```python
 labels = {**label('en', 'organization'), **label('de', 'Organisation')}
 ```
@@ -112,7 +119,7 @@ descriptions = description('en', 'social entity (not necessarily commercial)')
 descriptions.update(description('de', 'soziale Struktur mit einem gemeinsamen Ziel'))
 ```
 
-To add statements (claims), qualifiers and references, we need a `snak()` function. To create a snak, we have to specify `property`, `datavalue`, `datatype` and `snaktype`. For example, if our Wikibase instance has the property with ID `P1`, a label `Wikidata ID` and datatype `external-id`, we can create a mainsnak with that property and the value 'Q43229':
+To add statements (claims), qualifiers and references, we need the `snak` function. To create a snak, we have to specify `property`, `datavalue`, `datatype` and `snaktype`. For example, if a Wikibase instance has the property with ID `P1`, a label `Wikidata ID` and datatype `external-id`, we can create a mainsnak with that property and the value 'Q43229':
 ```python
 mainsnak = snak(datatype='external-id', value='Q43229', prop='P1', snaktype='value')
 ```
@@ -128,7 +135,7 @@ We have now a mainsnak, qualifiers and references. Let's create a claim for an i
 claims = claim(prop='P1', mainsnak=mainsnak, qualifiers=qualifiers, references=references)
 ```
 
-All ingredients for creating the JSON representation of an item are ready. The `entity()` function does the job:
+All ingredients for creating the JSON representation of an item are ready. The `entity` function does the job:
 ```python
 item = entity(labels=labels, aliases=aliases, descriptions=descriptions, claims=claims, etype='item')
 ```
@@ -197,14 +204,14 @@ from wikidataintegrator import wdi_login
 login_instance = wdi_login.WDLogin(user=config.username, pwd=config.password)
 ```
 
-You can also create the JSON representations of entities in WikidataIntegrator or WikibaseIntegrator and then fill them into a Wikibase instance using RaiseWikibase. In WikibaseIntegrator you can create a `wbi_core.ItemEngine` object and use the `get_json_representation()`  function:
+You can also create the JSON representations of entities in WikidataIntegrator or WikibaseIntegrator and then fill them into a Wikibase instance using RaiseWikibase. In WikibaseIntegrator you can create a `wbi_core.ItemEngine` object and use the `get_json_representation`  function:
 ```python
 from wikibaseintegrator import wbi_core
 item = wbi_core.ItemEngine(item_id='Q1003030')
 ijson = item.get_json_representation()
 ```
 
-In WikidataIntegrator a `wdi_core.WDItemEngine` object can be created and the `get_wd_json_representation()` function can be used:
+In WikidataIntegrator a `wdi_core.WDItemEngine` object can be created and the `get_wd_json_representation` function can be used:
 ```python
 from wikidataintegrator import wdi_core
 item = wdi_core.WDItemEngine(wd_item_id='Q1003030')
@@ -219,9 +226,9 @@ batch('wikibase-item', [ijson])
 
 ### Getting data from Wikidata and filling it into a Wikibase instance
 
-The [Wikidata](https://wikidata.org/) knowledge graph already has millions of items and thousands of properties. For many projects some of these entities can be reused as a starting point. Let's create the multilingual items [human](https://wikidata.org/entity/Q5), [organization](https://wikidata.org/entity/Q43229) and [location](https://wikidata.org/entity/Q17334923) in a local Wikibase instance using RaiseWikibase.
+The [Wikidata](https://wikidata.org/) knowledge graph already has millions of items and thousands of properties. For many projects some of these entities can be reused. Let's create the multilingual items [human](https://wikidata.org/entity/Q5), [organization](https://wikidata.org/entity/Q43229) and [location](https://wikidata.org/entity/Q17334923) in a local Wikibase instance using RaiseWikibase.
 
-The example below defines the function `get_wd_entity()`. It takes a Wikidata ID as an input, sends a request to Wikidata, gets the JSON representation of an entity, removes the keys unwanted in a local Wikibase instance, creates a claim and returns the JSON representation of the entity, if an error has not occured. The function `get_wd_entity()` is used to get the JSON representations for [human](https://wikidata.org/entity/Q5), [organization](https://wikidata.org/entity/Q43229) and [location](https://wikidata.org/entity/Q17334923). These JSON representations are then filled into a local Wikibase instance using the `batch` function.
+The example below defines the function `get_wd_entity`. It takes a Wikidata ID as an input, sends a request to Wikidata, gets the JSON representation of an entity, removes the keys unwanted in a local Wikibase instance, creates a claim and returns the JSON representation of the entity, if an error has not occured. The function `get_wd_entity` is used to get the JSON representations for [human](https://wikidata.org/entity/Q5), [organization](https://wikidata.org/entity/Q43229) and [location](https://wikidata.org/entity/Q17334923). These JSON representations are then filled into a local Wikibase instance using the `batch` function.
 
 ```python
 from RaiseWikibase.raiser import batch
@@ -253,7 +260,7 @@ items = [get_wd_entity(wid) for wid in wids]
 batch('wikibase-item', items)
 ```
 
-The line, where `entity['claims']` is rewritten, can be commented. Then, the created items contain the claims with the property IDs corresponding to Wikidata. Just try it out.
+The lines, where `entity['claims']` is rewritten, can be commented. Then, the created items contain the claims with the property IDs corresponding to Wikidata. Just try it out.
 
 We used the property with ID 'P1' in the claim. That property with a label 'Wikidata ID' can be created using the script [miniWikibase.py](https://github.com/UB-Mannheim/RaiseWikibase/blob/main/miniWikibase.py). It creates all 8400+ Wikidata properties in less than a minute.
 
@@ -274,7 +281,7 @@ The script saves the CSV files with numeric values of results and creates the pd
 
 The insert rates in pages per second are shown at Figure 1a for wikitexts and at Figure 1b for items. Every data point corresponds to a batch of ten thousands pages. At Figure 1a six different data points correspond to six repeated experiments. At Figure 1b two colors correspond to two repeated experiments and three shapes of a data point correspond to the three cases: 1) circle - each claim without a qualifier and without a reference, 2) x - each claim with one qualifier and without a reference, and 3) square - each claim with one qualifier and one reference.
 
-To 'reproduce' Figures 1a and 1b, set `batch_lengths` in `performance.py` to `[10000]`. Note that 'reproducibility' in this case does not mean that you will get the same values in the experiments as at Figures 1a and 1b. It means that you can get similar plots with the values specific for your hardware and software. Our analysis was performed using a workstation with 6-core Intel i5-8500T CPU @ 2.10GHz, 16GB RAM, SSD storage and running Debian 10.
+To 'reproduce' Figures 1a and 1b, set [batch_lengths](https://github.com/UB-Mannheim/RaiseWikibase/blob/main/performance.py#L39) to `[10000]`. Note that 'reproducibility' in this case does not mean that you will get the same values in the experiments as at Figures 1a and 1b. It means that you can get similar plots with the values specific for your hardware and software. Our analysis was performed using a workstation with 6-core Intel i5-8500T CPU @ 2.10GHz, 16GB RAM, SSD storage and running Debian 10.
 
 ## Creating a mini Wikibase instance with thousands of entities in a few minutes
 
