@@ -1,10 +1,9 @@
 # RaiseWikibase
 
 ```
-A tool for speeding up multilingual knowledge graph construction with Wikibase.
+A tool for speeding up multilingual knowledge graph construction with Wikibase
 ```
-* Fast inserts into a Wikibase instance.
-* Creates up to a million entities and wikitexts per hour.
+* Fast inserts into a Wikibase instance: creates up to a million entities and wikitexts per hour.
 * Creates a mini Wikibase instance with Wikidata properties in a few minutes.
 * Creates the [BERD](https://www.berd-bw.de) knowledge graph with millions of entities in a few hours.
 
@@ -26,13 +25,9 @@ A tool for speeding up multilingual knowledge graph construction with Wikibase.
 
 ### Installation
 
-Clone the RaiseWikibase repository: 
+Clone RaiseWikibase and install it via `pip3`:
 ```shell
 git clone https://github.com/UB-Mannheim/RaiseWikibase
-```
-
-Install RaiseWikibase via `pip3`:
-```shell
 cd RaiseWikibase/
 pip3 install -e .
 ```
@@ -43,7 +38,7 @@ The versions of the RaiseWikibase-related libraries can be found in [setup.py](h
 
 RaiseWikibase is solely based on [Wikibase Docker](https://github.com/wmde/wikibase-docker) developed by [Wikimedia Germany](https://wikimedia.de). [Wikibase Docker](https://github.com/wmde/wikibase-docker) significantly simplifies deployment of a [Wikibase](https://github.com/wikimedia/Wikibase) instance. The versions of the Wikibase-related software can be found in [docker-compose.yml](https://github.com/UB-Mannheim/RaiseWikibase/blob/main/docker-compose.yml): [wikibase:1.35-bundle](https://github.com/UB-Mannheim/RaiseWikibase/blob/main/docker-compose.yml#L16), [mariadb:10.3](https://github.com/UB-Mannheim/RaiseWikibase/blob/main/docker-compose.yml#L50), [wdqs:0.3.40](https://github.com/UB-Mannheim/RaiseWikibase/blob/main/docker-compose.yml#L84) and [elasticsearch:6.5.4-extra](https://github.com/UB-Mannheim/RaiseWikibase/blob/main/docker-compose.yml#L130). The image [wdqs:0.3.40](https://github.com/UB-Mannheim/RaiseWikibase/blob/main/docker-compose.yml#L84) is a Wikibase specific [Blazegraph](https://blazegraph.com) image.
 
-Copy [env.tmpl](https://github.com/UB-Mannheim/RaiseWikibase/blob/main/env.tmpl) to `.env` and substitute the default values with your
+:warning: &nbsp; Copy [env.tmpl](https://github.com/UB-Mannheim/RaiseWikibase/blob/main/env.tmpl) to `.env` and substitute the default values with your
 own usernames and passwords.
 
 Run in the main RaiseWikibase folder:
@@ -175,7 +170,7 @@ from RaiseWikibase.dbconnection import DBConnection
 from RaiseWikibase.raiser import page
 connection = DBConnection()
 page(connection=connection, content_model=content_model,
-     namespace=namespace, text=text, page_title=page_title, new=new)
+     namespace=namespace, text=text, page_title=page_title, new=True)
 connection.conn.commit()
 connection.conn.close()
 ```
@@ -321,3 +316,5 @@ A [setup](https://stackoverflow.com/a/63397827) for deployment using Nginx is pr
 This work was funded by the Ministry of Science, Research and Arts of Baden-Württemberg through the project [Business and Economics Research Data Center Baden-Württemberg (BERD@BW)](https://www.berd-bw.de).
 
 We thank [Jesper Zedlitz](https://github.com/jze) for his experiments explained at [the FactGrid blog](https://blog.factgrid.de/archives/2013) and for his open source code [wikibase-insert](https://github.com/jze/wikibase-insert).
+
+See also: [the official Wikibase website](https://wikiba.se), [Strategy for the Wikibase Ecosystem](https://upload.wikimedia.org/wikipedia/commons/c/cc/Strategy_for_Wikibase_Ecosystem.pdf), the [posts about Wikibase](https://addshore.com/tag/wikibase) and [Wikidata](https://addshore.com/tag/wikidata/) by [Adam 'addshore' Shorland](https://addshore.com/about), a [Wikibase tutorial](https://stuff.coffeecode.net/2018/wikibase-workshop-swib18.html) by [Dan Scott](https://dscott.ca/#i), [Wikibase Install Basic Tutorial](https://semlab.io/howto/wikibase_basic) and [Wikibase for Research Infrastructure](https://medium.com/@thisismattmiller/wikibase-for-research-infrastructure-part-1-d3f640dfad34) by [Matt Miller](https://thisismattmiller.com/about), [Get your own copy of WikiData](http://wiki.bitplan.com/index.php/Get_your_own_copy_of_WikiData) by [Wolfgang Fahl](https://github.com/WolfgangFahl), [Transferring Wikibase data between wikis](https://wikibase.consulting/transferring-wikibase-data-between-wikis) by [Jeroen De Dauw](https://www.EntropyWins.wtf), [Putting Data into Wikidata using Software](http://baskauf.blogspot.com/2019/06/putting-data-into-wikidata-using.html) by [Steve Baskauf](https://github.com/baskaufs) and [Vanderbilt Heard Library digital scholarship resources on Wikidata and Wikibase](https://heardlibrary.github.io/digital-scholarship/host/wikidata/), [Learning Wikibase](http://learningwikibase.com), [Wikibase Yearly Summary 2020](https://www.lehir.net/wikibase-yearly-summary-2020) and [Wikibase Yearly Summary 2021](https://www.lehir.net/wikibase-yearly-summary-2021).
