@@ -40,11 +40,11 @@ services:
       - MW_ADMIN_NAME=${WB_ADMIN_USER}
       - MW_ADMIN_PASS=${WB_ADMIN_PASS}
       - MW_ADMIN_EMAIL=${WB_ADMIN_MAIL}
-      - MW_SITE_NAME=BERD
+      - MW_SITE_NAME=${WB_SITE_NAME}
       - MW_WG_SECRET_KEY=${WB_WG_SECRET_KEY}
-      - DB_USER=berdbw
+      - DB_USER=${WB_DB_USER}
       - DB_PASS=${WB_DB_PASS}
-      - DB_NAME=berdbw
+      - DB_NAME=${WB_DB_NAME}
       - QS_PUBLIC_SCHEME_HOST_AND_PORT=http://localhost:9191
   mysql:
     image: mariadb:10.3
@@ -54,8 +54,8 @@ services:
       - ./berd/berd.cnf:/etc/mysql/mariadb.conf.d/berd.cnf
     environment:
       MYSQL_RANDOM_ROOT_PASSWORD: 'yes'
-      MYSQL_DATABASE: berdbw
-      MYSQL_USER: berdbw
+      MYSQL_DATABASE: ${WB_DB_NAME}
+      MYSQL_USER: ${WB_DB_USER}
       MYSQL_PASSWORD: ${WB_DB_PASS}
     networks:
       default:
@@ -77,7 +77,7 @@ services:
         aliases:
          - wdqs-frontend.svc
     environment:
-      - BRAND_TITLE=query.BERD-BW.de
+      - BRAND_TITLE=${WB_BRAND_TITLE}
       - WIKIBASE_HOST=${CONCEPT_URI_HOST}
       - WDQS_HOST=wdqs-proxy.svc
   wdqs:
@@ -94,8 +94,7 @@ services:
       - WIKIBASE_HOST=${CONCEPT_URI_HOST}
       - WDQS_HOST=wdqs.svc
       - WDQS_PORT=9999
-      - BLAZEGRAPH_OPT=-XX:MaxRAM=4g -XX:MaxDirectMemorySize=4g -Xmx2g -Xms2g -XX:MaxPermSize=1024m -Djdk.nio.maxCachedBufferSize=1048576
-      - HEAP_SIZE=2g
+      - HEAP_SIZE=6g
     expose:
       - 9999
   wdqs-proxy:
@@ -136,23 +135,3 @@ services:
     environment:
       discovery.type: single-node
       ES_JAVA_OPTS: "-Xms512m -Xmx512m"
-  quickstatements:
-    image: wikibase/quickstatements:latest
-    ports:
-     - "9191:80"
-    depends_on:
-     - wikibase
-    volumes:
-     - ${DATA_DIR}/quickstatements-data:/quickstatements/data
-    networks:
-      default:
-        aliases:
-         - quickstatements.svc
-    environment:
-      - QS_PUBLIC_SCHEME_HOST_AND_PORT=http://localhost:9191
-      - WB_PUBLIC_SCHEME_HOST_AND_PORT=http://localhost:8181
-      - WIKIBASE_SCHEME_AND_HOST=http://${CONCEPT_URI_HOST}
-      - WB_PROPERTY_NAMESPACE=122
-      - "WB_PROPERTY_PREFIX=Property:"
-      - WB_ITEM_NAMESPACE=120
-      - "WB_ITEM_PREFIX=Item:"
