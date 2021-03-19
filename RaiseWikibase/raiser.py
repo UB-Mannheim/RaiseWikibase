@@ -140,10 +140,10 @@ def building_indexing():
     connection.conn.close()
 
     # Run update.php
-    execute_shell(
-        'docker exec ' + 
-        container + 
-        ' bash "-c" "php maintenance/update.php --force --quick"')
+    #execute_shell(
+    #    'docker exec ' + 
+    #    container + 
+    #    ' bash "-c" "php maintenance/update.php --force --quick"')
     # Build the secondary tables for items and properties
     execute_shell(
         'docker exec ' + 
@@ -168,3 +168,8 @@ def building_indexing():
         'docker exec ' + 
         container + 
         ' bash "-c" "php extensions/CirrusSearch/maintenance/ForceSearchIndex.php --skipParse"')
+    # Run runJobs.php after indexing. See https://www.mediawiki.org/wiki/Manual:RunJobs.php
+    execute_shell(
+        'docker exec ' + 
+        container + 
+        ' bash "-c" "php maintenance/runJobs.php"')
