@@ -356,6 +356,33 @@ batch('wikibase-item', [item])
 
 Check the item at http://localhost:8181/wiki/Special:RecentChanges. Can you see all 18 claims at the item page?
 
+The changes in `LocalSettings.php.template` are:
+```
+wfLoadExtension( 'Math' );
+wfLoadExtension( 'WikibaseLocalMedia' );
+wfLoadExtension( 'WikibaseLexeme' );
+wfLoadExtension( 'Score' );
+wfLoadExtension( 'Form' );
+${DOLLAR}wgEnableUploads = true;
+${DOLLAR}wgGroupPermissions['user']['upload'] = false;
+${DOLLAR}wgGroupPermissions['user']['reupload'] = false;
+${DOLLAR}wgGroupPermissions['user']['reupload-shared'] = false;
+${DOLLAR}wgScoreTrim = true;
+${DOLLAR}wgImageMagickConvertCommand = '/usr/bin/convert';
+${DOLLAR}wgShellRestrictionMethod = 'firejail';
+${DOLLAR}wgMusicalNotationEnableWikibaseDataType = true;
+${DOLLAR}wgUseInstantCommons = true;
+```
+
+The changes in `docker-compose.yml` are:
+```
+      - ./extensions/Math:/var/www/html/extensions/Math
+      - ./extensions/WikibaseLocalMedia:/var/www/html/extensions/WikibaseLocalMedia
+      - ./extensions/Score:/var/www/html/extensions/Score
+      - ./extensions/WikibaseLexeme:/var/www/html/extensions/WikibaseLexeme
+      - ./extensions/Form:/var/www/html/extensions/Form
+```
+
 ### Compatibility with WikidataIntegrator and WikibaseIntegrator
 
 [WikidataIntegrator](https://github.com/SuLab/WikidataIntegrator) and [WikibaseIntegrator](https://github.com/LeMyst/WikibaseIntegrator) are the wrappers of the [Wikibase API](https://www.mediawiki.org/wiki/Wikibase/API). A bot account is needed to start data filling with them. RaiseWikibase can create a bot account for a local Wikibase instance, save the login and password to a configuration file and read them back to a `config` dictionary:
