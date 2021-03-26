@@ -11,6 +11,7 @@ A tool for speeding up multilingual knowledge graph construction with Wikibase
 - [How to use](#how-to-use)
   * [Installation](#installation)
   * [Wikibase Docker](#wikibase-docker)
+  * [Wikibase Extensions](#wikibase-extensions)
   * [Wikibase Data Model and RaiseWikibase functions](#wikibase-data-model-and-raisewikibase-functions)
   * [Creating entities and texts](#creating-entities-and-texts)
   * [Compatibility with WikidataIntegrator and WikibaseIntegrator](#compatibility-with-wikidataintegrator-and-wikibaseintegrator)
@@ -81,9 +82,17 @@ sudo rm -rf mediawiki-*  query-service-data/ quickstatements-data/
 docker-compose up -d
 ```
 
-Additionally, you can install [extensions](https://www.mediawiki.org/wiki/Manual:Extensions) for a Wikibase instance. Let's add extension [TemplateStyles](https://www.mediawiki.org/wiki/Extension:TemplateStyles). [Download](https://www.mediawiki.org/wiki/Special:ExtensionDistributor/TemplateStyles) and extract it to the folder `RaiseWikibase/extensions/`. Uncomment the [line 27](https://github.com/UB-Mannheim/RaiseWikibase/blob/main/docker-compose.yml#L27) in [docker-compose.yml](https://github.com/UB-Mannheim/RaiseWikibase/blob/main/docker-compose.yml) and the [lines 138-142](https://github.com/UB-Mannheim/RaiseWikibase/blob/main/berd/LocalSettings.php.template#L138-L142) in [LocalSettings.php.template](https://github.com/UB-Mannheim/RaiseWikibase/blob/main/berd/LocalSettings.php.template). Other extensions can be installed in a similar way. :warning: &nbsp; If you do not install the TemplateStyles extension and run the maintenance script `./maintenance/rebuildall.php` in the `*_wikibase_*` container, the error can occur: `The content model 'sanitized-css' is not registered on this wiki.` This happens because RaiseWikibase uploads a css-file with the content model `'sanitized-css'` and the TemplateStyles extension is needed to deal with that content model.
+See also [Wikibase/Docker](https://www.mediawiki.org/wiki/Wikibase/Docker).
 
-See also [Wikibase/Docker](https://www.mediawiki.org/wiki/Wikibase/Docker) and [Extending Wikibase](https://wikiba.se/extend).
+### Wikibase extensions
+
+"Extensions let you customize how MediaWiki looks and works" is written in [Manual:Extensions](https://www.mediawiki.org/wiki/Manual:Extensions). Note that [Wikibase](https://wikiba.se) is itself an extension to the [Mediawiki](https://www.mediawiki.org/wiki/MediaWiki) software.
+
+Let's add extension [TemplateStyles](https://www.mediawiki.org/wiki/Extension:TemplateStyles). [Download](https://www.mediawiki.org/wiki/Special:ExtensionDistributor/TemplateStyles) and extract it to the folder `RaiseWikibase/extensions/`. Uncomment the [line 27](https://github.com/UB-Mannheim/RaiseWikibase/blob/main/docker-compose.yml#L27) in [docker-compose.yml](https://github.com/UB-Mannheim/RaiseWikibase/blob/main/docker-compose.yml) and the [lines 138-142](https://github.com/UB-Mannheim/RaiseWikibase/blob/main/berd/LocalSettings.php.template#L138-L142) in [LocalSettings.php.template](https://github.com/UB-Mannheim/RaiseWikibase/blob/main/berd/LocalSettings.php.template). RaiseWikibase uploads a css-file with the content model `'sanitized-css'` and the TemplateStyles extension is needed to deal with that content model. :warning: &nbsp; If you do not install the TemplateStyles extension and run the maintenance script `./maintenance/rebuildall.php` in the `*_wikibase_*` container, the error can occur: `The content model 'sanitized-css' is not registered on this wiki.`
+
+To add a datatype [Mathematical expression](https://www.wikidata.org/wiki/Help:Data_type#Mathematical_expression) (or simply `Math`) to a Wikibase instance, install the extension [Math](https://www.mediawiki.org/wiki/Extension:Math).
+
+See also [Extending Wikibase](https://wikiba.se/extend).
 
 ### Wikibase Data Model and RaiseWikibase functions
 
@@ -259,6 +268,11 @@ batch('wikibase-item', items)
 
 The lines, where `entity['claims']` is rewritten, can be commented. Then, the created items contain the claims with the property IDs corresponding to Wikidata. Just try it out.
 
+If you filled the entities from Wikidata into a fresh Wikibase instance, but you cannot open a page at http://localhost:8181/entity/Q1, run in shell:
+```shell
+docker exec raisewikibase_wikibase_1 bash "-c" "php maintenance/update.php --quick --force"
+```
+
 We used the property with ID 'P1' in the claim. That property with a label 'Wikidata ID' can be created using the script [miniWikibase.py](https://github.com/UB-Mannheim/RaiseWikibase/blob/main/miniWikibase.py). It creates all 8400+ Wikidata properties in less than a minute.
 
 ## Performance analysis
@@ -319,4 +333,4 @@ This work was funded by the Ministry of Science, Research and Arts of Baden-Wür
 
 We thank [Jesper Zedlitz](https://github.com/jze) for his experiments explained at [the FactGrid blog](https://blog.factgrid.de/archives/2013) and for his open source code [wikibase-insert](https://github.com/jze/wikibase-insert).
 
-See also: [the official Wikibase website](https://wikiba.se), [Strategy for the Wikibase Ecosystem](https://upload.wikimedia.org/wikipedia/commons/c/cc/Strategy_for_Wikibase_Ecosystem.pdf), the [posts about Wikibase](https://addshore.com/tag/wikibase) and [Wikidata](https://addshore.com/tag/wikidata/) by [Adam 'addshore' Shorland](https://addshore.com/about), a [Wikibase tutorial](https://stuff.coffeecode.net/2018/wikibase-workshop-swib18.html) by [Dan Scott](https://dscott.ca/#i), [Wikibase Install Basic Tutorial](https://semlab.io/howto/wikibase_basic) and [Wikibase for Research Infrastructure](https://medium.com/@thisismattmiller/wikibase-for-research-infrastructure-part-1-d3f640dfad34) by [Matt Miller](https://thisismattmiller.com/about), [Get your own copy of WikiData](http://wiki.bitplan.com/index.php/Get_your_own_copy_of_WikiData) by [Wolfgang Fahl](https://github.com/WolfgangFahl), [Transferring Wikibase data between wikis](https://wikibase.consulting/transferring-wikibase-data-between-wikis) by [Jeroen De Dauw](https://www.EntropyWins.wtf), [Putting Data into Wikidata using Software](http://baskauf.blogspot.com/2019/06/putting-data-into-wikidata-using.html) by [Steve Baskauf](https://github.com/baskaufs), [Vanderbilt Heard Library digital scholarship resources on Wikidata and Wikibase](https://heardlibrary.github.io/digital-scholarship/host/wikidata/), [Learning Wikibase](http://learningwikibase.com), [Wikibase Yearly Summary 2020](https://www.lehir.net/wikibase-yearly-summary-2020) and [Wikibase Yearly Summary 2021](https://www.lehir.net/wikibase-yearly-summary-2021).
+See also: [the official Wikibase website](https://wikiba.se), [Wikidata & Wikibase architecture documentation](https://wmde.github.io/wikidata-wikibase-architecture), [Strategy for the Wikibase Ecosystem](https://upload.wikimedia.org/wikipedia/commons/c/cc/Strategy_for_Wikibase_Ecosystem.pdf), the [posts about Wikibase](https://addshore.com/tag/wikibase) and [Wikidata](https://addshore.com/tag/wikidata/) by [Adam 'addshore' Shorland](https://addshore.com/about), a [Wikibase tutorial](https://stuff.coffeecode.net/2018/wikibase-workshop-swib18.html) by [Dan Scott](https://dscott.ca/#i), [Wikibase Install Basic Tutorial](https://semlab.io/howto/wikibase_basic) and [Wikibase for Research Infrastructure](https://medium.com/@thisismattmiller/wikibase-for-research-infrastructure-part-1-d3f640dfad34) by [Matt Miller](https://thisismattmiller.com/about), [Get your own copy of WikiData](http://wiki.bitplan.com/index.php/Get_your_own_copy_of_WikiData) by [Wolfgang Fahl](https://github.com/WolfgangFahl), [Transferring Wikibase data between wikis](https://wikibase.consulting/transferring-wikibase-data-between-wikis) by [Jeroen De Dauw](https://www.EntropyWins.wtf), [Putting Data into Wikidata using Software](http://baskauf.blogspot.com/2019/06/putting-data-into-wikidata-using.html) by [Steve Baskauf](https://github.com/baskaufs), [Vanderbilt Heard Library digital scholarship resources on Wikidata and Wikibase](https://heardlibrary.github.io/digital-scholarship/host/wikidata/), [Learning Wikibase](http://learningwikibase.com), [Wikibase Yearly Summary 2020](https://www.lehir.net/wikibase-yearly-summary-2020) and [Wikibase Yearly Summary 2021](https://www.lehir.net/wikibase-yearly-summary-2021).
