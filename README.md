@@ -231,6 +231,9 @@ from RaiseWikibase.datamodel import label, alias, description, snak, claim, enti
 from RaiseWikibase.raiser import batch
 from RaiseWikibase.dbconnection import DBConnection
 
+localmedia = entity(labels=label('en', 'local media'), etype='property', datatype='localMedia')
+batch('wikibase-property', [localmedia])
+
 labels = label('en', 'Entity with many datatypes')
 
 c = DBConnection()
