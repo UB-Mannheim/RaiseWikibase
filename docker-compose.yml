@@ -20,7 +20,6 @@ services:
      - "8181:80"
     volumes:
       - ${DATA_DIR}/mediawiki-images-data:/var/www/html/images
-      - ${DATA_DIR}/quickstatements-data:/quickstatements/data
       - ./berd/LocalSettings.php.template:/LocalSettings.php.template
       - ./berd/logo_berdc_bw.jpg:/var/www/html/logo_berdc_bw.jpg
       - ./berd/TimelessTemplate.php:/var/www/html/skins/Timeless/includes/TimelessTemplate.php
