@@ -368,6 +368,8 @@ wfLoadExtension( 'WikibaseLocalMedia' );
 wfLoadExtension( 'WikibaseLexeme' );
 wfLoadExtension( 'Score' );
 wfLoadExtension( 'Form' );
+wfLoadExtension( 'JsonConfig' );
+wfLoadExtension( 'Kartographer' );
 ${DOLLAR}wgEnableUploads = true;
 ${DOLLAR}wgGroupPermissions['user']['upload'] = false;
 ${DOLLAR}wgGroupPermissions['user']['reupload'] = false;
@@ -377,6 +379,7 @@ ${DOLLAR}wgImageMagickConvertCommand = '/usr/bin/convert';
 ${DOLLAR}wgShellRestrictionMethod = 'firejail';
 ${DOLLAR}wgMusicalNotationEnableWikibaseDataType = true;
 ${DOLLAR}wgUseInstantCommons = true;
+${DOLLAR}wgKartographerMapServer = "https://tile.openstreetmap.org";
 ```
 
 The changes in `docker-compose.yml` are:
@@ -386,6 +389,8 @@ The changes in `docker-compose.yml` are:
       - ./extensions/Score:/var/www/html/extensions/Score
       - ./extensions/WikibaseLexeme:/var/www/html/extensions/WikibaseLexeme
       - ./extensions/Form:/var/www/html/extensions/Form
+      - ./extensions/Kartographer:/var/www/html/extensions/Kartographer
+      - ./extensions/JsonConfig:/var/www/html/extensions/JsonConfig
 ```
 
 Conclusions: 'in theory' a Wikibase instance offers 18 datatypes, but not all of them work out of the box. 'In practice' even if I follow all the instructions at the extension pages at Mediawiki and look at many issues at Phabricator, there are still some problems with maps, musical notations, lexemes, forms and senses. See [T278674](https://phabricator.wikimedia.org/T278674).
