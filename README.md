@@ -388,6 +388,8 @@ The changes in `docker-compose.yml` are:
       - ./extensions/Form:/var/www/html/extensions/Form
 ```
 
+Conclusions: 'in theory' a Wikibase instance offers 18 datatypes, but not all of them work out of the box. 'In practice' even if I follow all the instructions at the extension pages at Mediawiki and look at many issues at Phabricator, there are still some problems with maps, musical notations, lexemes, forms and senses. See [T278674](https://phabricator.wikimedia.org/T278674).
+
 ### Compatibility with WikidataIntegrator and WikibaseIntegrator
 
 [WikidataIntegrator](https://github.com/SuLab/WikidataIntegrator) and [WikibaseIntegrator](https://github.com/LeMyst/WikibaseIntegrator) are the wrappers of the [Wikibase API](https://www.mediawiki.org/wiki/Wikibase/API). A bot account is needed to start data filling with them. RaiseWikibase can create a bot account for a local Wikibase instance, save the login and password to a configuration file and read them back to a `config` dictionary:
