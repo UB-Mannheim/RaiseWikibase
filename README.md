@@ -224,6 +224,8 @@ The datatype [Lexeme](https://www.wikidata.org/wiki/Help:Data_type#Lexemes) requ
 
 The datatype [Form](https://www.wikidata.org/wiki/Help:Data_type#Forms) requires the [Form extension](https://www.mediawiki.org/wiki/Extension:Form). Add `wfLoadExtension( 'Form' );` to `LocalSettings.php.template`.
 
+To embed a map into a page instead of showing a link to a map, the [Kartographer extension](https://www.mediawiki.org/wiki/Extension:Kartographer) is needed. To run Kartographer, the [JsonConfig extension](https://www.mediawiki.org/wiki/Extension:JsonConfig) has to be installed. Then, the variable for a tile server `${DOLLAR}wgKartographerMapServer` has to be changed to a non-Mediawiki one. But even this is still not enough, see [T271617](https://phabricator.wikimedia.org/T271617) and [T259868](https://phabricator.wikimedia.org/T259868). So currently a map is not embedded.
+
 To perform the following test, you need to download all those extensions into `RaiseWikibase/extensions/`, mount them using `docker-compose.yml` and configure them in `LocalSettings.php.template`. Then run `miniWikibase.py` in order to upload the Wikidata properties. The following example creates an item with 18 claims corresponding to 18 properties with different datatypes.
 
 ```python
