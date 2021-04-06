@@ -3,6 +3,7 @@
 ```
 A tool for speeding up multilingual knowledge graph construction with Wikibase
 ```
+[[PDF preprint "RaiseWikibase: Fast inserts into the BERD instance" submitted to ESWC 2021 P&D](https://openreview.net/pdf?id=87hp7LJDJE)]
 * Fast inserts into a Wikibase instance: creates up to a million entities and wikitexts per hour.
 * Creates a mini Wikibase instance with Wikidata properties in a few minutes.
 * Creates the [BERD](https://www.berd-bw.de) knowledge graph with millions of entities in a few hours.
