@@ -110,7 +110,7 @@ def batch(content_model=None, texts=None, namespace=None, page_title=None, new=T
             connection.conn.close()
 
 
-def create_bot():
+def create_bot(bot_name='bot'):
     """
     Creates login and password for a bot. Saves them to '.config.json'.
     If bot exists, it prints about it.
@@ -118,7 +118,7 @@ def create_bot():
     """
     connection = DBConnection()
     connection.bot_delete()
-    botuser, botpass = connection.bot_create('bot')
+    botuser, botpass = connection.bot_create(bot_name)
     if botpass is None:
         print("Bot already exists.")
         sys.exit(1)
