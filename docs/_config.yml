@@ -1,6 +1,6 @@
 title: RaiseWikibase
 description: Fast inserts into a Wikibase instance
-baseurl: "/RaiseWikibase"
+baseurl: "/raisewikibase"
 url: "https://ub-mannheim.github.io"
 remote_theme: pmarsceill/just-the-docs
 color_scheme: nil
