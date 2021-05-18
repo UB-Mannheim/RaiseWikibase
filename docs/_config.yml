@@ -8,3 +8,5 @@ search_enabled: true
 aux_links:
   "View on GitHub":
     - "//github.com/UB-Mannheim/RaiseWikibase"
+
+theme: jekyll-theme-cayman
