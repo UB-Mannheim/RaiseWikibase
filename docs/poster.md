@@ -92,5 +92,5 @@ where `item` is the JSON representation of an item created using the [entity](ht
 [Wikidata](https://www.wikidata.org){: .btn .btn-green .mr-2 }
 [BERD@BW](https://www.berd-bw.de){: .btn .btn-purple .mr-2 }
 [bbw](https://github.com/UB-Mannheim/bbw){: .btn .btn-purple .mr-2 }
-[QuickStart](/quickstart/){: .btn .btn-blue .mr-2 }
+[QuickStart](https://ub-mannheim.github.io/RaiseWikibase/quickstart/){: .btn .btn-blue .mr-2 }
 [RaiseWikibase](https://github.com/UB-Mannheim/RaiseWikibase){: .btn .btn-blue }
