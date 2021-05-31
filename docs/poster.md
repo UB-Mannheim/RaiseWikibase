@@ -5,6 +5,8 @@
 * [Abstract](https://schema.org/abstract): _The open-source tool [RaiseWikibase](https://github.com/UB-Mannheim/RaiseWikibase) for fast [data import](https://www.mediawiki.org/wiki/Wikibase/Importing) and [knowledge graph](https://en.wikipedia.org/wiki/Knowledge_graph) construction with [Wikibase](https://www.wikiba.se) is presented._
 * [BERD@BW](https://www.berd-bw.de): Business & Economics Research Data Center [Baden-Württemberg](https://www.wikidata.org/wiki/Q985)
 
+![alt text](/assets/images/mediawiki_wb_import.png)
+
 ## Motivation
 
 * German company data is fragmented over providers, registers & time spans.
