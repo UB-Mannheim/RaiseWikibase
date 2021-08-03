@@ -29,7 +29,12 @@ def page(connection=None, content_model=None, namespace=None, text=None, page_ti
     """
     # 1. Check whether the content_model is valid.
     if content_model in ['wikibase-item', 'wikibase-property', 'wikibase-lexeme']:
-        # 2. For structured data find the namespace, etype (entity type), eid 
+        # 2.1 Take labels, descriptions and aliases from text for the secondary tables
+        fingerprint = {}
+        fingerprint['label'] = text.get('labels')
+        fingerprint['description'] = text.get('descriptions')
+        fingerprint['alias'] = text.get('aliases')
+        # 2.2 For structured data find the namespace, etype (entity type), eid
         # and page_title. Convert text from dict to str.
         namespace = namespaces[content_model]
         etype = content_model.replace('wikibase-', '')
@@ -75,6 +80,10 @@ def page(connection=None, content_model=None, namespace=None, text=None, page_ti
                           content_id=content_id, model_id=model_id,
                           content_model=content_model, namespace=namespace,
                           rev_id=rev_id, new=new, ip=ip)
+    # 7. Insert fingerprint (labels, descriptions & aliases) into the secondary tables.
+    if content_model in ['wikibase-item', 'wikibase-property']:
+        connection.insert_secondary(fingerprint=fingerprint, new_eid=new_eid,
+                                    content_model=content_model)
     # For structured data update counters in 'wb_id_counters'-table.
     if new and (content_model in ['wikibase-item', 'wikibase-property', 'wikibase-lexeme']):
         connection.update_wb_id_counters(new_eid=new_eid, content_model=content_model)
@@ -134,30 +143,11 @@ def create_bot(bot_name='bot'):
 
 
 def building_indexing():
-    """Builds the secondary tables and ElasticSearch index"""
+    """Builds the ElasticSearch index"""
     connection = DBConnection()
     container = connection.docker_wikibase
     connection.conn.close()
 
-    # Run update.php
-    #execute_shell(
-    #    'docker exec ' + 
-    #    container + 
-    #    ' bash "-c" "php maintenance/update.php --force --quick"')
-    # Build the secondary tables for items and properties
-    execute_shell(
-        'docker exec ' + 
-        container + 
-        ' bash "-c" "php extensions/Wikibase/repo/maintenance/rebuildItemTerms.php --sleep 0.1"')
-    execute_shell(
-        'docker exec ' + 
-        container + 
-        ' bash "-c" "php extensions/Wikibase/repo/maintenance/rebuildPropertyTerms.php --sleep 0.01"')
-    # Rebuild Property Info
-    execute_shell(
-            'docker exec ' + 
-            container + 
-            ' bash "-c" "php extensions/Wikibase/repo/maintenance/rebuildPropertyInfo.php --rebuild-all --force"')
     # CirrusSearch indexing. For huge tables use parallelization as explained at
     # https://github.com/wikimedia/mediawiki-extensions-CirrusSearch/blob/master/README
     execute_shell(
@@ -168,8 +158,3 @@ def building_indexing():
         'docker exec ' + 
         container + 
         ' bash "-c" "php extensions/CirrusSearch/maintenance/ForceSearchIndex.php --skipParse"')
-    # Run runJobs.php after indexing. See https://www.mediawiki.org/wiki/Manual:RunJobs.php
-    execute_shell(
-        'docker exec ' + 
-        container + 
-        ' bash "-c" "php maintenance/runJobs.php"')

@@ -21,6 +21,8 @@ class DBConnection:
 
         self.create_content_models()
         self.model_ids = self.get_content_models()
+        self.create_wbt_types()
+        self.wbt_types = self.get_wbt_types()
 
     def mysql_connect(self):
         """Helper function connecting to SQL database."""
@@ -112,6 +114,24 @@ class DBConnection:
         cur.close()
         return out
 
+    def create_wbt_types(self):
+        """Creates three wbt_types: label, description and alias"""
+        cur = self.conn.cursor()
+        q = "INSERT IGNORE INTO wbt_type (wby_name ) VALUES('label'),('description'),('alias')"
+        cur.execute(q)
+        self.conn.commit()
+        cur.close()
+
+    def get_wbt_types(self):
+        """Returns the existing wbt_types from wbt_type-table"""
+        cur = self.conn.cursor()
+        q = "SELECT * FROM wbt_type"
+        cur.execute(q)
+        out = dict((y.decode('utf-8'), x) for x, y in cur.fetchall())
+        self.conn.commit()
+        cur.close()
+        return out
+
     def create_content_models(self):
         """Creates a few content models"""
         cur = self.conn.cursor()
@@ -194,6 +214,53 @@ class DBConnection:
         content_id = cur.fetchone()[0]
         cur.close()
         return content_id
+
+    def get_wbtl_id(self, wbtl_type_id=None, wbxl_language=None, wbx_text=None, wbxl_id=None):
+        """Returns wbtl_id (int) in wbt_term_in_lang-table for given wbtl_type_id (int),
+        wbxl_language (language code), wbx_text (str) and wbxl_id (int)"""
+        cur = self.conn.cursor()
+        try:
+            cur.execute("""SELECT wbtl_id FROM wbt_term_in_lang, wbt_text_in_lang,
+                    wbt_text WHERE wbtl_text_in_lang_id=wbxl_id AND wbtl_type_id=%s
+                    AND wbxl_language=%s AND wbxl_text_id=wbx_id AND wbx_text=%s""",
+                    [wbtl_type_id, wbxl_language, wbx_text])
+            wbtl_id = cur.fetchone()[0]
+        except:
+            cur.execute("INSERT INTO wbt_term_in_lang VALUES(NULL,%s,%s)", [wbtl_type_id, wbxl_id])
+            cur.execute("SELECT LAST_INSERT_ID()")
+            wbtl_id = cur.fetchone()[0]
+        cur.close()
+        return wbtl_id
+
+    def get_wbxl_id(self, wbxl_language=None, wbx_text=None, wbx_id=None):
+        """Returns wbxl_id (int) in wbt_text_in_lang-table for given
+        wbxl_language (language code), wbx_text (str) and wbx_id (int)"""
+        cur = self.conn.cursor()
+        try:
+            cur.execute("""SELECT wbxl_id FROM wbt_text_in_lang, wbt_text
+                    WHERE wbxl_language=%s AND wbxl_text_id=wbx_id AND wbx_text=%s""",
+                    [wbxl_language, wbx_text])
+            wbxl_id = cur.fetchone()[0]
+        except:
+            cur.execute("INSERT INTO wbt_text_in_lang VALUES(NULL,%s,%s)",
+                        [wbxl_language, wbx_id])
+            cur.execute("SELECT LAST_INSERT_ID()")
+            wbxl_id = cur.fetchone()[0]
+        cur.close()
+        return wbxl_id
+
+    def get_wbx_id(self, wbx_text=None):
+        """Returns wbx_id (int) in wbt_text-table for given wbx_text (str)"""
+        cur = self.conn.cursor()
+        try:
+            cur.execute("SELECT wbx_id FROM wbt_text WHERE wbx_text=%s", [wbx_text])
+            wbx_id = cur.fetchone()[0]
+        except:
+            cur.execute("INSERT INTO wbt_text VALUES(NULL,%s)", [wbx_text])
+            cur.execute("SELECT LAST_INSERT_ID()")
+            wbx_id = cur.fetchone()[0]
+        cur.close()
+        return wbx_id
 
     def get_model_id(self, content_model=None):
         """Returns model_id (int) for the given content_model in content_models-table"""
@@ -380,5 +447,24 @@ class DBConnection:
         cur.execute(q7)
         cur.execute(q8)
         cur.execute(q9)
+        cur.close()
+        pass
+
+    def insert_secondary(self, fingerprint=None, new_eid=None, content_model=None):
+        """Inserts fingerprint data into 5 (4 per item or property) secondary tables"""
+        cur = self.conn.cursor()
+        for key, v in fingerprint.items():
+            wby_id = self.wbt_types.get(key) # key is 'label', 'alias' or 'description'; wby_id is the corresponding id
+            for lang, values in v.items():
+                values = [values] if isinstance(values, dict) else values # for labels and descriptions only, to make them consistent with aliases
+                for value in values:
+                    wbx_text = self.conn.escape_string(value['value'])[:255] # escaping & truncating
+                    wbx_id = self.get_wbx_id(wbx_text=wbx_text) # wbt_text
+                    wbxl_id = self.get_wbxl_id(wbxl_language=lang, wbx_text=wbx_text, wbx_id=wbx_id) # wbt_text_in_lang
+                    wbtl_id = self.get_wbtl_id(wbtl_type_id=wby_id, wbxl_language=lang, wbx_text=wbx_text, wbxl_id=wbxl_id) # wbt_term_in_lang
+                    if content_model=='wikibase-item':
+                        cur.execute("INSERT INTO wbt_item_terms VALUES(NULL,%s,%s)", [new_eid, wbtl_id])
+                    if content_model=='wikibase-property':
+                        cur.execute("INSERT IGNORE INTO wbt_property_terms VALUES(NULL,%s,%s)", [new_eid, wbtl_id])
         cur.close()
         pass
