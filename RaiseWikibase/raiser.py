@@ -151,10 +151,15 @@ def building_indexing():
     # CirrusSearch indexing. For huge tables use parallelization as explained at
     # https://github.com/wikimedia/mediawiki-extensions-CirrusSearch/blob/master/README
     execute_shell(
-        'docker exec ' + 
-        container + 
+        'docker exec ' +
+        container +
         ' bash "-c" "php extensions/CirrusSearch/maintenance/ForceSearchIndex.php --skipLinks --indexOnSkip"')
     execute_shell(
-        'docker exec ' + 
-        container + 
+        'docker exec ' +
+        container +
         ' bash "-c" "php extensions/CirrusSearch/maintenance/ForceSearchIndex.php --skipParse"')
+    # Run runJobs.php after CirrusSearch indexing. See https://www.mediawiki.org/wiki/Manual:RunJobs.php
+    execute_shell(
+        'docker exec ' +
+        container +
+        ' bash "-c" "php maintenance/runJobs.php"')
