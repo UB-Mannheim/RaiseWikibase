@@ -3,7 +3,7 @@ import uuid
 
 def label(language='en', value=''):
     """Create and return the JSON representation of a label (dict)
-    
+
     :param language: language code used for the label, default is 'en'
     :type language: str
     :param value: a label in the specified language
@@ -16,7 +16,7 @@ def label(language='en', value=''):
 
 def alias(language='en', value=''):
     """Create and return the JSON representation of an alias (dict)
-    
+
     :param language: language code used for the alias, default is 'en'
     :type language: str
     :param value: an alias or aliases in the specified language
@@ -34,7 +34,7 @@ def alias(language='en', value=''):
 
 def description(language='en', value=''):
     """Create and return the JSON representation of a description (dict)
-    
+
     :param language: language code used for the description, default is 'en'
     :type language: str
     :param value: a description in the specified language
@@ -47,7 +47,7 @@ def description(language='en', value=''):
 
 def snak(datatype='', value='', prop='', snaktype='value'):
     """Create and return the JSON representation of a snak (dict)
-    
+
     :param datatype: a one of 18 datatypes in the Wikibase data model
     :type datatype: str
     :param value: datavalue
@@ -174,7 +174,7 @@ def snak(datatype='', value='', prop='', snaktype='value'):
 
 def claim(prop='', mainsnak=snak(), qualifiers=[], references=[]):
     """Create and return the JSON representation of a claim (dict)
-    
+
     :param prop: The property identifier for this claim
     :type prop: str
     :param mainsnak: the main snak for this claim
@@ -187,17 +187,53 @@ def claim(prop='', mainsnak=snak(), qualifiers=[], references=[]):
     :rtype: dict
     """
     return {prop: [{'mainsnak': {**mainsnak, **{'hash': str(uuid.uuid4())}},
-                     'type': 'statement',
-                     'rank': 'normal',
-                     'qualifiers': {prop: qualifiers},
-                     'qualifiers-order': [prop],
-                     'references': [{'snaks': {prop: references}, 'snaks-order': [prop]}],
-                     'id': ''}]}
+                    'type': 'statement',
+                    'rank': 'normal',
+                    'qualifiers': {prop: qualifiers},
+                    'qualifiers-order': [prop],
+                    'references': [{'snaks': {prop: references}, 'snaks-order': [prop]}],
+                    'id': ''}]}
+
+
+def mainsnak(prop='', snak=snak(), qualifiers=[], references=[]):
+    """Create and return the JSON representation of a mainsnak (dict) with qualifiers & references
+
+    :param prop: The property identifier for this mainsnak
+    :type prop: str
+    :param snak: the snak for this mainsnak
+    :type snak: dict
+    :param qualifiers: a list of qualifiers
+    :type qualifiers: list
+    :param references: a list of references
+    :type references: list
+    :return: a dictionary with a mainsnak, qualifiers & references
+    :rtype: dict
+    """
+    return {'mainsnak': {**snak, **{'hash': str(uuid.uuid4())}},
+            'type': 'statement',
+            'rank': 'normal',
+            'qualifiers': {prop: qualifiers},
+            'qualifiers-order': [prop],
+            'references': [{'snaks': {prop: references}, 'snaks-order': [prop]}],
+            'id': ''}
+
+
+def statement(prop='', mainsnaks=[mainsnak()]):
+    """Create and return the JSON representation of a statement (dict)
+
+    :param prop: The property identifier for this statement
+    :type prop: str
+    :param mainsnaks: a list of mainsnaks for this statement
+    :type mainsnak: list
+    :return: a dictionary with a statement
+    :rtype: dict
+    """
+    return {prop: mainsnaks}
 
 
 def entity(labels={}, aliases={}, descriptions={}, claims={}, etype='', datatype=''):
     """Create and return the JSON representation of an entity (dict)
-    
+
     :param labels: A dictionary with labels. Default is empty dict.
     :type labels: dict
     :param aliases: A dictionary with aiases. Default is empty dict.

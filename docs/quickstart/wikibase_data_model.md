@@ -51,10 +51,29 @@ We have now a mainsnak, qualifiers and references. Let's create a claim for an i
 claims = claim(prop='P1', mainsnak=mainsnak, qualifiers=qualifiers, references=references)
 ```
 
+If you need a claim with multiple values for one property, there are two opportunities. The first one is using the `extend` function on lists:
+```python
+claims1 = claim(prop='P1', mainsnak=mainsnak1, qualifiers=qualifiers1, references=references1)
+claims2 = claim(prop='P1', mainsnak=mainsnak2, qualifiers=qualifiers2, references=references2)
+claims1['P1'].extend(claims2['P1'])
+```
+
+The second option is using the `mainsnak` and `statement` functions:
+```python
+snak1 = snak(datatype='external-id', value='Q43229', prop='P1', snaktype='value')
+snak2 = snak(datatype='external-id', value='Q5', prop='P1', snaktype='value')
+mainsnak1 = mainsnak(prop='P1', snak=snak1, qualifiers=[], references=[])
+mainsnak2 = mainsnak(prop='P1', snak=snak2, qualifiers=[], references=[])
+statements = statement(prop='P1', mainsnaks=[mainsnak1, mainsnak2])
+```
+
+Note that the `claim` and `statement` functions return the same template dictionaries, but their input parameters are different. The `claim` function is useful when your claims have one value per property. Multiple values per property are easier to create using the `statement` function.
+
 All ingredients for creating the JSON representation of an item are ready. The `entity` function does the job:
 ```python
 item = entity(labels=labels, aliases=aliases, descriptions=descriptions, claims=claims, etype='item')
 ```
+where `claims=claims` can be replaced by `claims=statements`.
 
 If a property is created, the corresponding datatype has to be additionally specified:
 ```python
