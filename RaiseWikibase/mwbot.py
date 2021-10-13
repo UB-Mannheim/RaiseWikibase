@@ -4,49 +4,51 @@ import os
 
 
 class MWBot:
-    ips = [
-        "0.0.0.0/0",
-        "::/0",
-    ]
-    perms = [
-        "basic",
-        "highvolume",
-        "editpage",
-        "editprotected",
-        "editmycssjs",
-        "editmyoptions",
-        "editinterface",
-        "editsiteconfig",
-        "createeditmovepage",
-        "uploadfile",
-        "uploadeditmovefile",
-        "patrol",
-        "rollback",
-        "blockusers",
-        "viewdeleted",
-        "viewrestrictedlogs",
-        "delete",
-        "oversight",
-        "protect",
-        "viewmywatchlist",
-        "editmywatchlist",
-        "sendemail",
-        "createaccount",
-        "privateinfo",
-    ]
+    def __init__(self):
+        self.ips = [
+          "0.0.0.0/0",
+          "::/0",
+        ]
+        self.perms = [
+            "basic",
+            "highvolume",
+            "editpage",
+            "editprotected",
+            "editmycssjs",
+            "editmyoptions",
+            "editinterface",
+            "editsiteconfig",
+            "createeditmovepage",
+            "uploadfile",
+            "uploadeditmovefile",
+            "patrol",
+            "rollback",
+            "blockusers",
+            "viewdeleted",
+            "viewrestrictedlogs",
+            "delete",
+            "oversight",
+            "protect",
+            "viewmywatchlist",
+            "editmywatchlist",
+            "sendemail",
+            "createaccount",
+            "privateinfo",
+        ]
 
-    def get_ips(ips=ips):
+    def get_ips(self):
         """Helper function for generating column 'bp_restrictions'."""
-        return """{"IPAddresses":["%s"]}""" % '","'.join(ips)
+        return """{"IPAddresses":["%s"]}""" % '","'.join(self.ips)
 
-    def get_perms(perms=perms):
+    def get_perms(self):
         """Helper function for generating column 'bp_grants'."""
-        return """["%s"]""" % '","'.join(perms)
+        return """["%s"]""" % '","'.join(self.perms)
 
-    def gen_password(password, salt=None, hash_name='sha512',
+    def gen_password(self, password=None, salt=None, hash_name='sha512',
                      iterations=30000, dklen=64):
         """Helper function for generating column 'bp_password'. See also
         https://www.mediawiki.org/wiki/Manual:Bot_passwords_table"""
+        print(password)
         bpassword = bytes(password, 'ascii')
         if salt is None:
             salt = os.urandom(16)

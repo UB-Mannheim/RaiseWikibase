@@ -15,7 +15,7 @@ def execute_shell(command):
             print(output.strip().decode('ascii'))
     process.poll()
 
-    
+
 def get_ip():
     """Get and return ip-address (str)
 

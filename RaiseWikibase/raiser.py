@@ -4,7 +4,6 @@ from RaiseWikibase.utils import get_ip, execute_shell
 from RaiseWikibase.settings import Settings
 import uuid
 import json
-import re
 from tqdm import tqdm
 
 
@@ -58,9 +57,7 @@ def page(connection=None, content_model=None, namespace=None, text=None, page_ti
         # page_title.
         if namespace is None:
             raise ValueError('{} is not a valid namespace for the content model {}.'.format(namespace, content_model))
-        if page_title:
-            page_title = page_title
-        else:
+        if page_title is None:
             raise ValueError('{} is not a valid "page_title".'.format(page_title))
     else:
         raise ValueError('{} is not a valid "content_model". Do we need to add it?'.format(content_model))

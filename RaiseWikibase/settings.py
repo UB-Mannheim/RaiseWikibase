@@ -25,6 +25,11 @@ class Settings(dict):
         """Forward attribute setter to dictionary."""
         self[key] = value
 
+    def __eq__(self, other):
+        if not isinstance(other, Settings):
+            return False
+        return self.load() == other.load() and self._filename == other._filename
+
     def load(self):
         """Try loading settings from file, ignore JSON parsing errors."""
         if os.path.exists(self._filename):

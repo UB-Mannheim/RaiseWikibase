@@ -15,14 +15,13 @@ class DBConnection:
         self.mysql_env = docker_env(self.docker_mysql)
         self.mysql_ports = docker_ports(self.docker_mysql)
         self.wikibase_env = docker_env(self.docker_wikibase)
-
         self.conn = self.mysql_connect()
         self.user_id = self.get_admin_user_id()
-
         self.create_content_models()
         self.model_ids = self.get_content_models()
         self.create_wbt_types()
         self.wbt_types = self.get_wbt_types()
+        self.MWBot = MWBot()
 
     def mysql_connect(self):
         """Helper function connecting to SQL database."""
@@ -67,10 +66,10 @@ class DBConnection:
         '{bp_grants}')""".format(
             bp_user=self.user_id,
             bp_app_id=name,
-            bp_password=MWBot.gen_password(password, salt),
+            bp_password=self.MWBot.gen_password(password, salt),
             bp_token=token,
-            bp_restrictions=MWBot.get_ips(),
-            bp_grants=MWBot.get_perms(),
+            bp_restrictions=self.MWBot.get_ips(),
+            bp_grants=self.MWBot.get_perms(),
         )
         cur.execute(query)
         self.conn.commit()
@@ -225,7 +224,7 @@ class DBConnection:
                     AND wbxl_language=%s AND wbxl_text_id=wbx_id AND wbx_text=%s""",
                     [wbtl_type_id, wbxl_language, wbx_text])
             wbtl_id = cur.fetchone()[0]
-        except:
+        except Exception:
             cur.execute("INSERT INTO wbt_term_in_lang VALUES(NULL,%s,%s)", [wbtl_type_id, wbxl_id])
             cur.execute("SELECT LAST_INSERT_ID()")
             wbtl_id = cur.fetchone()[0]
@@ -241,7 +240,7 @@ class DBConnection:
                     WHERE wbxl_language=%s AND wbxl_text_id=wbx_id AND wbx_text=%s""",
                     [wbxl_language, wbx_text])
             wbxl_id = cur.fetchone()[0]
-        except:
+        except Exception:
             cur.execute("INSERT INTO wbt_text_in_lang VALUES(NULL,%s,%s)",
                         [wbxl_language, wbx_id])
             cur.execute("SELECT LAST_INSERT_ID()")
@@ -255,7 +254,7 @@ class DBConnection:
         try:
             cur.execute("SELECT wbx_id FROM wbt_text WHERE wbx_text=%s", [wbx_text])
             wbx_id = cur.fetchone()[0]
-        except:
+        except Exception:
             cur.execute("INSERT INTO wbt_text VALUES(NULL,%s)", [wbx_text])
             cur.execute("SELECT LAST_INSERT_ID()")
             wbx_id = cur.fetchone()[0]
@@ -279,7 +278,6 @@ class DBConnection:
             content_model=content_model)
         cur.execute(q)
         cur.close()
-        pass
 
     def search_text_str(self, substring=None, strict=None):
         """Searches a substring in old_text of text-table and returns page_title"""
@@ -397,7 +395,6 @@ class DBConnection:
         cur.execute("INSERT INTO recentchanges VALUES (NULL,%s,1,%s,%s,%s,0,0,%s,%s,%s,%s,%s,%s,2,%s,%s,%s,0,0,NULL,'','')",
                     [timenow, namespace, page_title, comment_id, int(new), page_id, rev_id, rc_last_oldid, rc_type, rc_source, ip, rc_old_len, len_data])
         cur.close()
-        pass
 
     def insert_secondary(self, fingerprint=None, new_eid=None, content_model=None):
         """Inserts fingerprint data into 5 (4 per item or property) secondary tables"""
@@ -416,4 +413,3 @@ class DBConnection:
                     if content_model=='wikibase-property':
                         cur.execute("INSERT IGNORE INTO wbt_property_terms VALUES(NULL,%s,%s)", [new_eid, wbtl_id])
         cur.close()
-        pass

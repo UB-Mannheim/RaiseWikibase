@@ -1,5 +1,5 @@
 from RaiseWikibase.dbconnection import DBConnection
-from RaiseWikibase.datamodel import label, alias, description, snak, claim, entity
+from RaiseWikibase.datamodel import snak, claim, entity
 from RaiseWikibase.raiser import batch
 import random
 import string

@@ -1,12 +1,11 @@
 from RaiseWikibase.dbconnection import DBConnection
 from RaiseWikibase.datamodel import label, alias, description, snak, claim, entity, namespaces, datatypes
 from RaiseWikibase.utils import get_wikidata_properties
-from RaiseWikibase.raiser import page, batch, building_indexing
+from RaiseWikibase.raiser import page, batch
 from pathlib import Path
 import requests
 import time
 import numpy as np
-import csv
 
 
 def restrict(d, languages=['en', 'de']):
@@ -153,6 +152,7 @@ if __name__ == "__main__":
 
     # to make the KG production-ready, execute building_indexing() as well
     # or run in shell 'docker-compose down' and 'docker-compose up -d' again
+    # from RaiseWikibase.raiser import building_indexing
     # building_indexing() 
 
     print('Total time in seconds: ', time.time() - time0)
