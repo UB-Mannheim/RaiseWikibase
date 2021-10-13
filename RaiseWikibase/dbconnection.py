@@ -352,7 +352,7 @@ class DBConnection:
                content_model=None, namespace=None,
                rev_id=None, new=False, ip=None):
         """Inserts data into 9 tables during creation and edit of a page"""
-        timenow = re.sub("[^0-9]", "", datetime.datetime.now().isoformat())[0:14]
+        timenow = re.sub("[^0-9]", "", datetime.datetime.utcnow().isoformat())[0:14]
         len_data = len(text)
         sha1hash = hashlib.sha1(text.encode()).hexdigest()[0:31]
         if new:
@@ -379,74 +379,23 @@ class DBConnection:
             page_latest = rev_id
         else:
             raise ValueError('{} is not a valid "new" parameter. Use "True" or "False".'.format(new))
-        q1 = "INSERT INTO text VALUES('{db_text_id}','{db_text}','utf-8')".format(
-            db_text_id=text_id,
-            db_text=text)
-        q2 = """REPLACE INTO page VALUES('{db_page_id}','{db_namespace}','{db_page_title}','',0,'{db_new}',
-            rand(),'{db_timenow}','{db_timenow}','{db_page_latest}','{db_len}','{db_content_model}',NULL)""".format(
-            db_page_id=page_id,
-            db_page_title=page_title,
-            db_namespace=namespace,
-            db_timenow=timenow,
-            db_page_latest=page_latest,
-            db_len=len_data,
-            db_content_model=content_model,
-            db_new=int(new))
-        q3 = """INSERT INTO revision VALUES(NULL,'{db_page_id}','{db_comment_id}',
-            0,'{db_timenow}',0,0,'{db_len}','{db_rev_parent_id}','{db_sha1hash}')""".format(
-            db_comment_id=comment_id,
-            db_page_id=page_id,
-            db_timenow=timenow,
-            db_len=len_data,
-            db_sha1hash=sha1hash,
-            db_rev_parent_id=rev_parent_id)
-        q4 = "INSERT INTO comment VALUES('{db_comment_id}','{db_chash}','{db_comment}',NULL)".format(
-            db_comment_id=comment_id,
-            db_chash=chash,
-            db_comment=comment)
-        q5 = "INSERT INTO revision_comment_temp VALUES ('{db_rev_id}','{db_comment_id}')".format(
-            db_rev_id=rev_id,
-            db_comment_id=comment_id)
-        q6 = "INSERT INTO revision_actor_temp VALUES( '{db_rev_id}', 1, '{db_timenow}', '{db_page_id}')".format(
-            db_rev_id=rev_id,
-            db_timenow=timenow,
-            db_page_id=page_id)
-        q7 = """INSERT INTO content VALUES('{db_content_id}','{db_len_data}',
-            '{db_sha1hash}','{db_model_id}','{db_tt_text_id}')""".format(
-            db_content_id=content_id,
-            db_len_data=len_data,
-            db_sha1hash=sha1hash,
-            db_model_id=model_id,
-            db_tt_text_id='tt:' + str(text_id))
-        q8 = "INSERT INTO slots VALUES( '{db_text_id}', 1, '{db_content_id}', '{db_text_id}')".format(
-            db_text_id=text_id,
-            db_content_id=content_id)
-        q9 = """INSERT INTO recentchanges VALUES ( NULL,'{db_timenow}',1,
-            '{db_namespace}','{db_page_title}','{db_comment_id}',0,0,'{db_new}',
-            '{db_page_id}','{db_rev_id}','{db_rc_last_oldid}','{db_rc_type}',
-            '{db_rc_source}',2,'{db_rc_ip}','{db_rc_old_len}','{db_len_data}',0,0,NULL,'',''  )""".format(
-            db_timenow=timenow,
-            db_namespace=namespace,
-            db_page_title=page_title,
-            db_comment_id=comment_id,
-            db_page_id=page_id,
-            db_rc_old_len=rc_old_len,
-            db_len_data=len_data,
-            db_rev_id=rev_id,
-            db_new=int(new),
-            db_rc_type=rc_type,
-            db_rc_source=rc_source,
-            db_rc_ip=ip,
-            db_rc_last_oldid=rc_last_oldid)
-        cur.execute(q1)
-        cur.execute(q2)
-        cur.execute(q3)
-        cur.execute(q4)
-        cur.execute(q5)
-        cur.execute(q6)
-        cur.execute(q7)
-        cur.execute(q8)
-        cur.execute(q9)
+        cur.execute("INSERT INTO text VALUES(%s,%s,'utf-8')", [text_id, text])
+        cur.execute("REPLACE INTO page VALUES(%s,%s,%s,'',0,%s,rand(),%s,%s,%s,%s,%s,NULL)",
+                    [page_id, namespace, page_title, int(new), timenow, timenow, page_latest, len_data, content_model])
+        cur.execute("INSERT INTO revision VALUES(NULL,%s,%s,0,%s,0,0,%s,%s,%s)",
+                    [page_id, comment_id, timenow, len_data, rev_parent_id, sha1hash])
+        cur.execute("INSERT INTO comment VALUES(%s,%s,%s,NULL)",
+                    [comment_id, chash, comment])
+        cur.execute("INSERT INTO revision_comment_temp VALUES (%s,%s)",
+                    [rev_id, comment_id])
+        cur.execute("INSERT INTO revision_actor_temp VALUES(%s,1,%s,%s)",
+                    [rev_id, timenow, page_id])
+        cur.execute("INSERT INTO content VALUES(%s,%s,%s,%s,%s)",
+                    [content_id, len_data, sha1hash, model_id, 'tt:' + str(text_id)])
+        cur.execute("INSERT INTO slots VALUES(%s,1,%s,%s)",
+                    [text_id, content_id, text_id])
+        cur.execute("INSERT INTO recentchanges VALUES (NULL,%s,1,%s,%s,%s,0,0,%s,%s,%s,%s,%s,%s,2,%s,%s,%s,0,0,NULL,'','')",
+                    [timenow, namespace, page_title, comment_id, int(new), page_id, rev_id, rc_last_oldid, rc_type, rc_source, ip, rc_old_len, len_data])
         cur.close()
         pass
 
