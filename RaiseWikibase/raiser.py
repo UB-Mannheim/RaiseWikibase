@@ -66,8 +66,8 @@ def page(connection=None, content_model=None, namespace=None, text=None, page_ti
         raise ValueError('{} is not a valid "content_model". Do we need to add it?'.format(content_model))
 
     # 4. Escape text.
-    text = re.escape(text)
-    text = text.replace("\'", "''")
+    # text = re.escape(text)
+    # text = text.replace("\'", "''")
     
     # 5. Find all IDs in different tables.
     [text_id, page_id, comment_id, content_id, rev_id] = connection.get_ids(new=new, page_title=page_title,
