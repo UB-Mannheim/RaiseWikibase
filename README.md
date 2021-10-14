@@ -8,6 +8,8 @@ A tool for speeding up multilingual knowledge graph construction with Wikibase
 * Creates a mini Wikibase instance with Wikidata properties in a few minutes.
 * Creates the [BERD](https://www.berd-bw.de) knowledge graph with millions of entities in a few hours.
 
+:warning: &nbsp; This tool is experimental. The current desire is to move its functionality to the Wikibase API, see the ticket [T287164 "Improve bulk import via API"](https://phabricator.wikimedia.org/T287164). If you are interested in improving bulk import into Wikibase, please contribute to that ticket.
+
 ## Table of contents
 - [How to use](#how-to-use)
   * [Installation](#installation)
@@ -36,8 +38,6 @@ git clone https://github.com/UB-Mannheim/RaiseWikibase
 cd RaiseWikibase/
 pip3 install -e .
 ```
-
-The versions of the RaiseWikibase-related libraries can be found in [setup.py](https://github.com/UB-Mannheim/RaiseWikibase/blob/main/setup.py).
 
 ### Wikibase Docker
 
