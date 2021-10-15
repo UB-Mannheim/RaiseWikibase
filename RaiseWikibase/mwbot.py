@@ -48,7 +48,6 @@ class MWBot:
                      iterations=30000, dklen=64):
         """Helper function for generating column 'bp_password'. See also
         https://www.mediawiki.org/wiki/Manual:Bot_passwords_table"""
-        print(password)
         bpassword = bytes(password, 'ascii')
         if salt is None:
             salt = os.urandom(16)
