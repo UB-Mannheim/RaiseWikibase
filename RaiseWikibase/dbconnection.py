@@ -214,10 +214,9 @@ class DBConnection:
         cur.close()
         return content_id
 
-    def get_wbtl_id(self, wbtl_type_id=None, wbxl_language=None, wbx_text=None, wbxl_id=None):
+    def get_wbtl_id(self, cur=None, wbtl_type_id=None, wbxl_language=None, wbx_text=None, wbxl_id=None):
         """Returns wbtl_id (int) in wbt_term_in_lang-table for given wbtl_type_id (int),
         wbxl_language (language code), wbx_text (str) and wbxl_id (int)"""
-        cur = self.conn.cursor()
         try:
             cur.execute("""SELECT wbtl_id FROM wbt_term_in_lang, wbt_text_in_lang,
                     wbt_text WHERE wbtl_text_in_lang_id=wbxl_id AND wbtl_type_id=%s
@@ -228,13 +227,11 @@ class DBConnection:
             cur.execute("INSERT INTO wbt_term_in_lang VALUES(NULL,%s,%s)", [wbtl_type_id, wbxl_id])
             cur.execute("SELECT LAST_INSERT_ID()")
             wbtl_id = cur.fetchone()[0]
-        cur.close()
         return wbtl_id
 
-    def get_wbxl_id(self, wbxl_language=None, wbx_text=None, wbx_id=None):
+    def get_wbxl_id(self, cur=None, wbxl_language=None, wbx_text=None, wbx_id=None):
         """Returns wbxl_id (int) in wbt_text_in_lang-table for given
         wbxl_language (language code), wbx_text (str) and wbx_id (int)"""
-        cur = self.conn.cursor()
         try:
             cur.execute("""SELECT wbxl_id FROM wbt_text_in_lang, wbt_text
                     WHERE wbxl_language=%s AND wbxl_text_id=wbx_id AND wbx_text=%s""",
@@ -245,12 +242,10 @@ class DBConnection:
                         [wbxl_language, wbx_id])
             cur.execute("SELECT LAST_INSERT_ID()")
             wbxl_id = cur.fetchone()[0]
-        cur.close()
         return wbxl_id
 
-    def get_wbx_id(self, wbx_text=None):
+    def get_wbx_id(self, cur=None, wbx_text=None):
         """Returns wbx_id (int) in wbt_text-table for given wbx_text (str)"""
-        cur = self.conn.cursor()
         try:
             cur.execute("SELECT wbx_id FROM wbt_text WHERE wbx_text=%s", [wbx_text])
             wbx_id = cur.fetchone()[0]
@@ -258,7 +253,6 @@ class DBConnection:
             cur.execute("INSERT INTO wbt_text VALUES(NULL,%s)", [wbx_text])
             cur.execute("SELECT LAST_INSERT_ID()")
             wbx_id = cur.fetchone()[0]
-        cur.close()
         return wbx_id
 
     def get_model_id(self, content_model=None):
@@ -380,8 +374,8 @@ class DBConnection:
         cur.execute("INSERT INTO text VALUES(%s,%s,'utf-8')", [text_id, text])
         cur.execute("REPLACE INTO page VALUES(%s,%s,%s,'',0,%s,rand(),%s,%s,%s,%s,%s,NULL)",
                     [page_id, namespace, page_title, int(new), timenow, timenow, page_latest, len_data, content_model])
-        cur.execute("INSERT INTO revision VALUES(NULL,%s,%s,0,%s,0,0,%s,%s,%s)",
-                    [page_id, comment_id, timenow, len_data, rev_parent_id, sha1hash])
+        cur.execute("INSERT INTO revision VALUES(NULL,%s,0,0,%s,0,0,%s,%s,%s)",
+                    [page_id, timenow, len_data, rev_parent_id, sha1hash])
         cur.execute("INSERT INTO comment VALUES(%s,%s,%s,NULL)",
                     [comment_id, chash, comment])
         cur.execute("INSERT INTO revision_comment_temp VALUES (%s,%s)",
@@ -399,17 +393,26 @@ class DBConnection:
     def insert_secondary(self, fingerprint=None, new_eid=None, content_model=None):
         """Inserts fingerprint data into 5 (4 per item or property) secondary tables"""
         cur = self.conn.cursor()
-        for key, v in fingerprint.items():
-            wby_id = self.wbt_types.get(key) # key is 'label', 'alias' or 'description'; wby_id is the corresponding id
-            for lang, values in v.items():
-                values = [values] if isinstance(values, dict) else values # for labels and descriptions only, to make them consistent with aliases
-                for value in values:
-                    wbx_text = self.conn.escape_string(value['value'])[:255] # escaping & truncating
-                    wbx_id = self.get_wbx_id(wbx_text=wbx_text) # wbt_text
-                    wbxl_id = self.get_wbxl_id(wbxl_language=lang, wbx_text=wbx_text, wbx_id=wbx_id) # wbt_text_in_lang
-                    wbtl_id = self.get_wbtl_id(wbtl_type_id=wby_id, wbxl_language=lang, wbx_text=wbx_text, wbxl_id=wbxl_id) # wbt_term_in_lang
-                    if content_model=='wikibase-item':
-                        cur.execute("INSERT INTO wbt_item_terms VALUES(NULL,%s,%s)", [new_eid, wbtl_id])
-                    if content_model=='wikibase-property':
+        if content_model=='wikibase-item':
+            for key, v in fingerprint.items():
+                wby_id = self.wbt_types.get(key) # key is 'label', 'alias' or 'description'; wby_id is the corresponding id
+                for lang, values in v.items():
+                    values = [values] if isinstance(values, dict) else values # for labels and descriptions only, to make them consistent with aliases
+                    for value in values:
+                        wbx_text = self.conn.escape_string(value['value'])[:255] # escaping & truncating
+                        wbx_id = self.get_wbx_id(cur=cur, wbx_text=wbx_text) # wbt_text
+                        wbxl_id = self.get_wbxl_id(cur=cur, wbxl_language=lang, wbx_text=wbx_text, wbx_id=wbx_id) # wbt_text_in_lang
+                        wbtl_id = self.get_wbtl_id(cur=cur, wbtl_type_id=wby_id, wbxl_language=lang, wbx_text=wbx_text, wbxl_id=wbxl_id) # wbt_term_in_lang
+                        cur.execute("INSERT IGNORE INTO wbt_item_terms VALUES(NULL,%s,%s)", [new_eid, wbtl_id])
+        if content_model=='wikibase-property':
+            for key, v in fingerprint.items():
+                wby_id = self.wbt_types.get(key) # key is 'label', 'alias' or 'description'; wby_id is the corresponding id
+                for lang, values in v.items():
+                    values = [values] if isinstance(values, dict) else values # for labels and descriptions only, to make them consistent with aliases
+                    for value in values:
+                        wbx_text = self.conn.escape_string(value['value'])[:255] # escaping & truncating
+                        wbx_id = self.get_wbx_id(cur=cur, wbx_text=wbx_text) # wbt_text
+                        wbxl_id = self.get_wbxl_id(cur=cur, wbxl_language=lang, wbx_text=wbx_text, wbx_id=wbx_id) # wbt_text_in_lang
+                        wbtl_id = self.get_wbtl_id(cur=cur, wbtl_type_id=wby_id, wbxl_language=lang, wbx_text=wbx_text, wbxl_id=wbxl_id) # wbt_term_in_lang
                         cur.execute("INSERT IGNORE INTO wbt_property_terms VALUES(NULL,%s,%s)", [new_eid, wbtl_id])
         cur.close()
