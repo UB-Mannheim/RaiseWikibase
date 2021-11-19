@@ -48,6 +48,8 @@ def page(connection=None, content_model=None, namespace=None, text=None, page_ti
         if new:
             new_eid = str(connection.get_last_eid(content_model=content_model) + 1)
             text['id'] = prefix + new_eid
+        else:
+            new_eid = text['id'][1:]
         page_title = text['id']
         for value in text['claims'].values():
             [val.update({'id': text['id'] + '$' + str(uuid.uuid4())}) for val in value]
