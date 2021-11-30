@@ -7,7 +7,7 @@ with open("README.md", "r") as fh:
 
 setup(
     name="RaiseWikibase",
-    version='0.1.0',
+    version='1.35.0-wmde.0',
     author="Renat Shigapov, Joerg Mechnich, Irene Schumm",
     license="MIT",
     description="RaiseWikibase: Fast inserts into a Wikibase instance",
