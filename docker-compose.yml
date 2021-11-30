@@ -127,6 +127,8 @@ services:
   elasticsearch:
     image: wikibase/elasticsearch:6.5.4-extra
     restart: unless-stopped
+    volumes:
+      - ${DATA_DIR}/mediawiki-elasticsearch-data:/usr/share/elasticsearch/data
     networks:
       default:
         aliases:
