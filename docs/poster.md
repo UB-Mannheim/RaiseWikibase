@@ -26,7 +26,7 @@
 ## RaiseWikibase
 
 * Open-source [Python](https://www.wikidata.org/wiki/Q28865) tool.
-* Adapted to [Wikibase Docker Image](https://github.com/wmde/wikibase-docker) "1.35".
+* Adapted to [Wikibase Docker Image](https://github.com/wmde/wikibase-release-pipeline) "1.35".
 * Connects to MariaDB via the [mysqlclient](https://github.com/PyMySQL/mysqlclient) library.
 
 ## Main functions

@@ -1,6 +1,6 @@
 == BERD knowledge graph ==
 
-This is an automatically constructed BERD knowledge graph using [https://github.com/UB-Mannheim/RaiseWikibase RaiseWikibase], [https://github.com/wmde/wikibase-docker Wikibase Docker] and [https://www.wikidata.org Wikidata].
+This is an automatically constructed BERD knowledge graph using [https://github.com/UB-Mannheim/RaiseWikibase RaiseWikibase], [https://github.com/wmde/wikibase-release-pipeline Wikibase Docker] and [https://www.wikidata.org Wikidata].
 
 * [//localhost:8181/wiki/Special:AllPages?from=&to=&namespace=120&hideredirects=1 Items]
 * [//localhost:8181/wiki/Special:AllPages?from=&to=&namespace=122&hideredirects=1 Properties]
