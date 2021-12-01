@@ -52,8 +52,9 @@ Install [Docker](https://docs.docker.com/get-docker/).
 
 Run in the main RaiseWikibase folder:
 ```shell
-docker-compose up -d
+docker-compose -f docker-compose.yml -f docker-compose.extra.yml up -d --scale wikibase_jobrunner=1
 ```
+See more details at [Wikibase Release Pipeline](https://github.com/wmde/wikibase-release-pipeline/tree/wmde.2/example).
 
 If it runs first time, it pulls the Wikibase Docker images. Then it builds, creates, starts, and attaches to containers for a service.
 Check whether it's running using:
@@ -84,7 +85,7 @@ Usually in less than a minute from the start you will see the messages from `wdq
 If you want to stop the Wikibase Docker, to remove all your uploaded data and to run a fresh Wikibase instance, use:
 ```shell
 docker-compose down
-sudo rm -rf mediawiki-*  query-service-data/ quickstatements-data/
+docker volume prune
 docker-compose up -d
 ```
 
