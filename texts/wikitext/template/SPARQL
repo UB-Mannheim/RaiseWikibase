@@ -1,3 +1,3 @@
 <noinclude>Template to show syntax-highlighted SPARQL query and a few links at the bottom</noinclude>{{#tag:syntaxhighlight|{{{query}}}|highlight="{{{highlight|}}}"|start="{{{start|1}}}"|{{{line|line}}}=line|lang="sparql"|style="margin:.5em; max-width: -moz-max-content;
 min-width: 20em;"}}
-<div class="displayonly">[//localhost:8282/#{{urlencode: {{{query}}} | PATH }} Try it!]</div>
+<div class="displayonly">[//localhost:8834/#{{urlencode: {{{query}}} | PATH }} Try it!]</div>

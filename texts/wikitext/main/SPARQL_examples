@@ -1,4 +1,4 @@
-{{Warning| Editing this page will change the examples shown at http://localhost:8282  }}
+{{Warning| Editing this page will change the examples shown at http://localhost:8834  }}
 These basic queries help to understand [https://www.wikidata.org/wiki/Wikidata:SPARQL_tutorial SPARQL] and the [https://www.mediawiki.org/wiki/Wikibase/Indexing/RDF_Dump_Format Wikibase RDF format].
 == Items ==
 

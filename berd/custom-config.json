@@ -1,18 +1,21 @@
 {
     "api": {
       "sparql": {
-        "uri": "/proxy/wdqs/bigdata/namespace/wdq/sparql"
+        "uri": "http://localhost:8834/proxy/wdqs/bigdata/namespace/wdq/sparql"
       },
       "wikibase": {
-        "uri": "/proxy/wikibase/w/api.php"
+        "uri": "http://localhost:80/proxy/wikibase/w/api.php"
       },
       "examples": {
-        "server": "http://localhost:8181/",
-        "endpoint": "api/rest_v1/page/html/",
+        "server": "http://localhost:80/",
+        "endpoint": "w/api.php",
         "pageTitle": "SPARQL_examples",
         "pagePathElement": "wiki/"
       },
-      "urlShortener": "tinyurl"
+      "urlShortener": "tinyurl",
+      "query-builder": {
+      "server": "http://localhost:8834/querybuilder/"
+    }
     },
     "brand": {
       "title": "$BRAND_TITLE",

@@ -2,11 +2,11 @@
 
 This is an automatically constructed BERD knowledge graph using [https://github.com/UB-Mannheim/RaiseWikibase RaiseWikibase], [https://github.com/wmde/wikibase-release-pipeline Wikibase Docker] and [https://www.wikidata.org Wikidata].
 
-* [//localhost:8181/wiki/Special:AllPages?from=&to=&namespace=120&hideredirects=1 Items]
-* [//localhost:8181/wiki/Special:AllPages?from=&to=&namespace=122&hideredirects=1 Properties]
-* [//localhost:8181/wiki/Special:AllPages?from=&to=&namespace=10&hideredirects=1 Templates]
-* [//localhost:8181/wiki/Special:AllPages?from=&to=&namespace=828&hideredirects=1 Modules]
-* [//localhost:8181/wiki/Special:AllPages?from=&to=&namespace=0&hideredirects=1 Pages in the main namespace]
+* [//localhost:80/wiki/Special:AllPages?from=&to=&namespace=120&hideredirects=1 Items]
+* [//localhost:80/wiki/Special:AllPages?from=&to=&namespace=122&hideredirects=1 Properties]
+* [//localhost:80/wiki/Special:AllPages?from=&to=&namespace=10&hideredirects=1 Templates]
+* [//localhost:80/wiki/Special:AllPages?from=&to=&namespace=828&hideredirects=1 Modules]
+* [//localhost:80/wiki/Special:AllPages?from=&to=&namespace=0&hideredirects=1 Pages in the main namespace]
 
 == Wikibase and Wikidata ==
 

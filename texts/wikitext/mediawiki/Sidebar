@@ -1,12 +1,12 @@
 
 * navigation
 ** mainpage|mainpage-description
-** http://localhost:8282|Query service
+** http://localhost:8834|Query service
 ** recentchanges-url|recentchanges
 ** randompage-url|randompage
 ** helppage|help-mediawiki
-** //localhost:8181/wiki/Special:AllPages?from=&to=&namespace=120&hideredirects=1 | All items
-** //localhost:8181/wiki/Special:AllPages?from=&to=&namespace=122&hideredirects=1 | All properties
+** //localhost:80/wiki/Special:AllPages?from=&to=&namespace=120&hideredirects=1 | All items
+** //localhost:80/wiki/Special:AllPages?from=&to=&namespace=122&hideredirects=1 | All properties
 ** Special:NewItem|New item
 ** Special:NewProperty|New property
 ** https://www.berd-bw.de|BERD@BW

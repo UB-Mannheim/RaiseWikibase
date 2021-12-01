@@ -223,10 +223,12 @@ if __name__ == "__main__":
                                                                   opencorporatesid, 'value')]))
                     items.append(e)
                     del e
-                if i % 100000 == 0:
+                if i % 1000 == 0:
                     batch('wikibase-item', items)
                     print(time.time() - time1)
                     items = []
+                if i>=1001:
+                    break
 
     # to make the KG production-ready, execute the following as well
     # or run in shell 'docker-compose down' and 'docker-compose up -d' again
