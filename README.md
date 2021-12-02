@@ -36,14 +36,14 @@ Clone RaiseWikibase and install it via `pip3`:
 ```shell
 git clone https://github.com/UB-Mannheim/RaiseWikibase
 cd RaiseWikibase/
-pip3 install -e .
+pip3 install .
 ```
 
 ### Wikibase Docker
 
 :eyes: &nbsp; [Wikibase Docker](https://github.com/wmde/wikibase-release-pipeline) is distributed under [BSD 3-Clause License](https://github.com/wmde/wikibase-release-pipeline/blob/master/LICENSE). Please fulfill the requirements.
 
-RaiseWikibase is solely based on [Wikibase Docker](https://github.com/wmde/wikibase-release-pipeline) developed by [Wikimedia Germany](https://wikimedia.de). [Wikibase Docker](https://github.com/wmde/wikibase-release-pipeline) significantly simplifies deployment of a [Wikibase](https://github.com/wikimedia/Wikibase) instance. The versions of the Wikibase-related software can be found in [docker-compose.yml](https://github.com/UB-Mannheim/RaiseWikibase/blob/main/docker-compose.yml): [wikibase:1.35-bundle](https://github.com/UB-Mannheim/RaiseWikibase/blob/main/docker-compose.yml#L16), [mariadb:10.3](https://github.com/UB-Mannheim/RaiseWikibase/blob/main/docker-compose.yml#L50), [wdqs:0.3.40](https://github.com/UB-Mannheim/RaiseWikibase/blob/main/docker-compose.yml#L84) and [elasticsearch:6.5.4-extra](https://github.com/UB-Mannheim/RaiseWikibase/blob/main/docker-compose.yml#L130). The image [wdqs:0.3.40](https://github.com/UB-Mannheim/RaiseWikibase/blob/main/docker-compose.yml#L84) is a Wikibase specific [Blazegraph](https://blazegraph.com) image.
+RaiseWikibase is solely based on [Wikibase Docker](https://github.com/wmde/wikibase-release-pipeline) developed by [Wikimedia Germany](https://wikimedia.de). [Wikibase Docker](https://github.com/wmde/wikibase-release-pipeline) significantly simplifies deployment of a [Wikibase](https://github.com/wikimedia/Wikibase) instance.
 
 :warning: &nbsp; Copy [env.tmpl](https://github.com/UB-Mannheim/RaiseWikibase/blob/main/env.tmpl) to `.env` and substitute the default values with your
 own usernames and passwords.
@@ -94,8 +94,6 @@ See also [Wikibase/Docker](https://www.mediawiki.org/wiki/Wikibase/Docker).
 ### Wikibase Extensions
 
 "Extensions let you customize how MediaWiki looks and works" is written in [Manual:Extensions](https://www.mediawiki.org/wiki/Manual:Extensions). Note that [Wikibase](https://wikiba.se) is itself an extension to the [Mediawiki](https://www.mediawiki.org/wiki/MediaWiki) software.
-
-Let's add extension [TemplateStyles](https://www.mediawiki.org/wiki/Extension:TemplateStyles). [Download](https://www.mediawiki.org/wiki/Special:ExtensionDistributor/TemplateStyles) and extract it to the folder `RaiseWikibase/extensions/`. Uncomment the [line 27](https://github.com/UB-Mannheim/RaiseWikibase/blob/main/docker-compose.yml#L27) in [docker-compose.yml](https://github.com/UB-Mannheim/RaiseWikibase/blob/main/docker-compose.yml) and the [lines 138-142](https://github.com/UB-Mannheim/RaiseWikibase/blob/main/berd/LocalSettings.php.template#L138-L142) in [LocalSettings.php.template](https://github.com/UB-Mannheim/RaiseWikibase/blob/main/berd/LocalSettings.php.template). RaiseWikibase uploads a css-file with the content model `'sanitized-css'` and the TemplateStyles extension is needed to deal with that content model. :warning: &nbsp; If you do not install the TemplateStyles extension and run the maintenance script `./maintenance/rebuildall.php` in the `*_wikibase_*` container, the error can occur: `The content model 'sanitized-css' is not registered on this wiki.`
 
 To add the datatype [Mathematical expression](https://www.wikidata.org/wiki/Help:Data_type#Mathematical_expression) (or simply `Math`) to a Wikibase instance, install the extension [Math](https://www.mediawiki.org/wiki/Extension:Math). An example is the property [defining formula](https://www.wikidata.org/entity/P2534).
 
@@ -303,7 +301,7 @@ If you filled the entities from Wikidata into a fresh Wikibase instance, but you
 docker exec raisewikibase_wikibase_1 bash "-c" "php maintenance/update.php --quick --force"
 ```
 
-We used the property with ID 'P1' in the claim. That property with a label 'Wikidata ID' can be created using the script [miniWikibase.py](https://github.com/UB-Mannheim/RaiseWikibase/blob/main/miniWikibase.py). It creates all 8400+ Wikidata properties in less than a minute.
+We used the property with ID 'P1' in the claim. That property with a label 'Wikidata ID' can be created using the script [miniWikibase.py](https://github.com/UB-Mannheim/RaiseWikibase/blob/main/miniWikibase.py). It creates all 9000+ Wikidata properties in two minutes.
 
 ## Performance analysis
 

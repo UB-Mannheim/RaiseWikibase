@@ -47,4 +47,4 @@ If you filled the entities from Wikidata into a fresh Wikibase instance, but you
 docker exec raisewikibase_wikibase_1 bash "-c" "php maintenance/update.php --quick --force"
 ```
 
-We used the property with ID 'P1' in the claim. That property with a label 'Wikidata ID' can be created using the script [miniWikibase.py](https://github.com/UB-Mannheim/RaiseWikibase/blob/main/miniWikibase.py). It creates all 8400+ Wikidata properties in less than a minute.
+We used the property with ID 'P1' in the claim. That property with a label 'Wikidata ID' can be created using the script [miniWikibase.py](https://github.com/UB-Mannheim/RaiseWikibase/blob/main/miniWikibase.py). It creates all 9000+ Wikidata properties in two minutes.

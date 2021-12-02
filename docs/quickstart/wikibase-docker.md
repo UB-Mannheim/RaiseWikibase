@@ -6,7 +6,7 @@ nav_order: 2a
 ---
 # Wikibase Docker
 
-RaiseWikibase is based on [Wikibase Docker](https://github.com/wmde/wikibase-release-pipeline) developed by [Wikimedia Germany](https://wikimedia.de). [Wikibase Docker](https://github.com/wmde/wikibase-release-pipeline) is distributed under [BSD 3-Clause License](https://github.com/wmde/wikibase-release-pipeline/blob/master/LICENSE). Please fulfill the requirements. It significantly simplifies deployment of a [Wikibase](https://github.com/wikimedia/Wikibase) instance. The versions of the Wikibase-related software can be found in [docker-compose.yml](https://github.com/UB-Mannheim/RaiseWikibase/blob/main/docker-compose.yml): [wikibase:1.35-bundle](https://github.com/UB-Mannheim/RaiseWikibase/blob/main/docker-compose.yml#L16), [mariadb:10.3](https://github.com/UB-Mannheim/RaiseWikibase/blob/main/docker-compose.yml#L50), [wdqs:0.3.40](https://github.com/UB-Mannheim/RaiseWikibase/blob/main/docker-compose.yml#L84) and [elasticsearch:6.5.4-extra](https://github.com/UB-Mannheim/RaiseWikibase/blob/main/docker-compose.yml#L130). The image [wdqs:0.3.40](https://github.com/UB-Mannheim/RaiseWikibase/blob/main/docker-compose.yml#L84) is a Wikibase specific [Blazegraph](https://blazegraph.com) image.
+RaiseWikibase is based on [Wikibase Docker](https://github.com/wmde/wikibase-release-pipeline) developed by [Wikimedia Germany](https://wikimedia.de). [Wikibase Docker](https://github.com/wmde/wikibase-release-pipeline) is distributed under [BSD 3-Clause License](https://github.com/wmde/wikibase-release-pipeline/blob/master/LICENSE). Please fulfill the requirements. It significantly simplifies deployment of a [Wikibase](https://github.com/wikimedia/Wikibase) instance.
 
 Copy [env.tmpl](https://github.com/UB-Mannheim/RaiseWikibase/blob/main/env.tmpl) to `.env` and substitute the default values with your
 own usernames and passwords.
@@ -15,8 +15,9 @@ Install [Docker](https://docs.docker.com/get-docker/).
 
 Run in the main RaiseWikibase folder:
 ```shell
-docker-compose up -d
+docker-compose -f docker-compose.yml -f docker-compose.extra.yml up -d --scale wikibase_jobrunner=1
 ```
+See more details at [Wikibase Release Pipeline](https://github.com/wmde/wikibase-release-pipeline/tree/wmde.2/example).
 
 If it runs first time, it pulls the Wikibase Docker images. Then it builds, creates, starts, and attaches to containers for a service.
 Check whether it's running using:
@@ -47,7 +48,7 @@ Usually in less than a minute from the start you will see the messages from `wdq
 If you want to stop the Wikibase Docker, to remove all your uploaded data and to run a fresh Wikibase instance, use:
 ```shell
 docker-compose down
-sudo rm -rf mediawiki-*  query-service-data/ quickstatements-data/
+docker volume prune
 docker-compose up -d
 ```
 
